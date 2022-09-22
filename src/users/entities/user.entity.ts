@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import {
   Column,
@@ -17,9 +18,11 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
+  @Exclude()
   salt: string;
 
   @Column()
@@ -32,11 +35,14 @@ export class User {
   role: string;
 
   @Column()
+  @Exclude()
   isActive: boolean;
 
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 }
