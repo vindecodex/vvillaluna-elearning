@@ -8,13 +8,16 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 import * as bcrypt from 'bcrypt';
-import { MailService } from 'src/providers/mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
+import { MailService } from './providers/mail/mail.service';
+import { JwtPayload } from './providers/jwt/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
     private mailService: MailService,
+    private jwtService: JwtService,
   ) {}
 
   async create(userCredentialsDto: UserCredentialsDto) {
@@ -33,8 +36,18 @@ export class AuthService {
         isActive: false,
       });
 
+      const jwtPayload: JwtPayload = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+      };
+
+      const verificationToken = this.jwtService.sign(jwtPayload);
+
       await this.userRepo.save(user);
-      await this.mailService.sendVerification(user, '$token_sample$');
+      await this.mailService.sendVerification(user, verificationToken);
 
       return user;
     } catch (e) {
