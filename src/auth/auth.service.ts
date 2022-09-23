@@ -8,10 +8,14 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 import * as bcrypt from 'bcrypt';
+import { MailService } from 'src/providers/mail/mail.service';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepo: Repository<User>,
+    private mailService: MailService,
+  ) {}
 
   async create(userCredentialsDto: UserCredentialsDto) {
     const { password, verifyPassword } = userCredentialsDto;
@@ -30,6 +34,8 @@ export class AuthService {
       });
 
       await this.userRepo.save(user);
+      await this.mailService.sendVerification(user, '$token_sample$');
+
       return user;
     } catch (e) {
       if (e.code === '23505') {

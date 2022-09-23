@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './providers/mail/mail.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
       synchronize: !!!process.env.PRODUCTION,
     }),
     AuthModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
