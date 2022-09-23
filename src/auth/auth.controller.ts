@@ -11,6 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/decorators/get-user.decorators';
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 
 @Controller()
@@ -27,5 +28,10 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   verifyAccount(@GetUser() user: User) {
     return this.authService.verifyUser(user);
+  }
+
+  @Post('signup/verification')
+  resendVerification(@Body() resendVerificationDto: ResendVerificationDto) {
+    return this.authService.resendVerificationEmail(resendVerificationDto);
   }
 }
