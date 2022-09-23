@@ -5,13 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { MailModule } from './providers/mail/mail.module';
+import { MailModule } from './auth/providers/mail/mail.module';
 
 @Module({
   imports: [
     UsersModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
+      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
