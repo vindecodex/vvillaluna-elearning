@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from './providers/mail/mail.service';
 import { JwtPayload } from './providers/jwt/jwt-payload.interface';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,16 +39,7 @@ export class AuthService {
 
       await this.userRepo.save(user);
 
-      const jwtPayload: JwtPayload = {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-      };
-
-      const verificationToken = this.jwtService.sign(jwtPayload);
-      await this.mailService.sendVerification(user, verificationToken);
+      await this.sendVerificationEmail(user);
 
       return user;
     } catch (e) {
@@ -66,9 +58,27 @@ export class AuthService {
         isActive: true,
       });
 
-      return this.userRepo.save(_user);
+      await this.userRepo.save(_user);
     } catch (e) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async resendVerificationEmail(resendVerificationDto: ResendVerificationDto) {
+    const { email } = resendVerificationDto;
+    const user = await this.userRepo.findOneBy({ email });
+    await this.sendVerificationEmail(user);
+  }
+
+  async sendVerificationEmail(user: User) {
+    const jwtPayload: JwtPayload = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
+    const verificationToken = this.jwtService.sign(jwtPayload);
+    await this.mailService.sendVerification(user, verificationToken);
   }
 }
