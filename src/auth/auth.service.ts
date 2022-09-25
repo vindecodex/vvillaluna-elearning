@@ -20,7 +20,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async create(userCredentialsDto: UserCredentialsDto) {
+  async createUser(userCredentialsDto: UserCredentialsDto) {
     const { password, verifyPassword } = userCredentialsDto;
     if (password !== verifyPassword) {
       throw new BadRequestException('Password did not match');
@@ -36,6 +36,8 @@ export class AuthService {
         isActive: false,
       });
 
+      await this.userRepo.save(user);
+
       const jwtPayload: JwtPayload = {
         id: user.id,
         email: user.email,
@@ -45,8 +47,6 @@ export class AuthService {
       };
 
       const verificationToken = this.jwtService.sign(jwtPayload);
-
-      await this.userRepo.save(user);
       await this.mailService.sendVerification(user, verificationToken);
 
       return user;
@@ -56,6 +56,19 @@ export class AuthService {
       } else {
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async verifyUser(user: User) {
+    try {
+      const _user = await this.userRepo.preload({
+        ...user,
+        isActive: true,
+      });
+
+      return this.userRepo.save(_user);
+    } catch (e) {
+      throw new InternalServerErrorException();
     }
   }
 }
