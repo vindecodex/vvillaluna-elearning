@@ -73,12 +73,9 @@ export class AuthService {
       role: user.role,
     };
 
-    const refreshToken = this.jwtService.sign({ id: user.id });
-    const accessToken = this.jwtService.sign(userResponseData, {
-      expiresIn: '30s',
-    });
+    const accessToken = this.jwtService.sign(userResponseData);
 
-    response.cookie('refresh_token', refreshToken, {
+    response.cookie('token', accessToken, {
       httpOnly: true,
       maxAge: 3600 * 24 * 1000,
     });
