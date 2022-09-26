@@ -16,6 +16,16 @@ export class MailService {
     return res;
   }
 
+  async sendResetPasswordLink(email: string, resetPasswordToken: string) {
+    const resetLink = `http://localhost:3000/password?token=${resetPasswordToken}`;
+    const res = await this.mailerService.sendMail({
+      to: email,
+      subject: 'Reset Password',
+      html: `Click this <a href="${resetLink}">link</a> to proceed with the password reset`,
+    });
+    return res;
+  }
+
   async sendAccountNotFound(email: string) {
     const res = await this.mailerService.sendMail({
       to: email,
