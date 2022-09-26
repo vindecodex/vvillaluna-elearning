@@ -15,7 +15,7 @@ export class CurrentUserInterceptor implements NestInterceptor {
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
-    if (request.cookies) {
+    if (request.cookies['token']) {
       request.user = this.jwtService.decode(request.cookies['token']);
     }
     return next.handle();
