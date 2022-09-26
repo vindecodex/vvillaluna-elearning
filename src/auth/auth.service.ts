@@ -15,6 +15,7 @@ import { JwtPayload } from './providers/jwt/jwt-payload.interface';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -86,6 +87,50 @@ export class AuthService {
     };
   }
 
+  async resetPassword(_user: User, resetPasswordDto: ResetPasswordDto) {
+    const { password, verifyPassword } = resetPasswordDto;
+    if (password !== verifyPassword) {
+      throw new BadRequestException('Verify password did not match');
+    }
+
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await this.userRepo.preload({
+      ..._user,
+      password: hashedPassword,
+      salt,
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    await this.userRepo.save(user);
+    return { status: 'success' };
+  }
+
+  async requestResetPassword(email: string) {
+    try {
+      if (!email) throw new BadRequestException('Email not provided');
+      const user = await this.userRepo.findOneBy({ email });
+      if (!user) {
+        await this.mailService.sendAccountNotFound(email);
+        return;
+      }
+
+      const jwtPayload: JwtPayload = {
+        id: user.id,
+      };
+
+      const resetPasswordToken = this.jwtService.sign(jwtPayload);
+
+      await this.mailService.sendResetPasswordLink(email, resetPasswordToken);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async verifyUser(user: User) {
     try {
       const _user = await this.userRepo.preload({
@@ -95,7 +140,7 @@ export class AuthService {
 
       await this.userRepo.save(_user);
     } catch (e) {
-      throw new InternalServerErrorException();
+      throw e;
     }
   }
 
@@ -107,19 +152,16 @@ export class AuthService {
         await this.mailService.sendAccountNotFound(email);
         return;
       }
+
       await this.sendVerificationEmail(user);
     } catch (e) {
-      throw new InternalServerErrorException();
+      throw e;
     }
   }
 
   async sendVerificationEmail(user: User) {
     const jwtPayload: JwtPayload = {
       id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
     };
     const verificationToken = this.jwtService.sign(jwtPayload);
     await this.mailService.sendVerification(user, verificationToken);
