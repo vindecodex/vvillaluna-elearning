@@ -26,7 +26,6 @@ export class UsersService {
       const user = await this.userRepo.findOne({ where: { id } });
       return { ...user };
     } catch (e) {
-      console.log(e);
       if (e.code === '22P02') {
         throw new BadRequestException('Invalid ID format provided');
       } else {
