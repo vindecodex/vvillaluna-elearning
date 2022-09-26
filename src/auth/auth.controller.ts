@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Query,
   Res,
   UnauthorizedException,
   UseGuards,
@@ -18,6 +19,7 @@ import { LoginDto } from './dto/login.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 import { Response } from 'express';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
@@ -53,6 +55,21 @@ export class AuthController {
       status: 'success',
       message: "You've been logged out!",
     };
+  }
+
+  @Get('password')
+  requestResetPassword(@Query('email') email: string) {
+    return this.authService.requestResetPassword(email);
+  }
+
+  @Post('password')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(200)
+  resetPassword(
+    @GetUser() user: User,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(user, resetPasswordDto);
   }
 
   @Get('signup/verification')
