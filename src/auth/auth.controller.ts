@@ -6,6 +6,7 @@ import {
   HttpCode,
   Post,
   Res,
+  UnauthorizedException,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -35,6 +36,23 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.authService.authenticate(loginDto, response);
+  }
+
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(200)
+  logout(
+    @GetUser() user: User,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    response.clearCookie('token');
+    return {
+      status: 'success',
+      message: "You've been logged out!",
+    };
   }
 
   @Get('signup/verification')
