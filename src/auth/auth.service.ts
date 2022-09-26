@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
@@ -12,6 +13,8 @@ import { JwtService } from '@nestjs/jwt';
 import { MailService } from './providers/mail/mail.service';
 import { JwtPayload } from './providers/jwt/jwt-payload.interface';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { LoginDto } from './dto/login.dto';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -51,6 +54,41 @@ export class AuthService {
     }
   }
 
+  async login(loginDto: LoginDto, response: Response) {
+    const { email, password } = loginDto;
+    const user = await this.userRepo.findOne({
+      where: { email },
+    });
+
+    if (!user.isActive)
+      throw new BadRequestException('User is not yet verified');
+    if (!user || !(await bcrypt.compare(password, user.password)))
+      throw new UnauthorizedException('Invalid credentials');
+
+    const userResponseData: JwtPayload = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
+
+    const refreshToken = this.jwtService.sign({ id: user.id });
+    const accessToken = this.jwtService.sign(userResponseData, {
+      expiresIn: '30s',
+    });
+
+    response.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      maxAge: 3600 * 24 * 1000,
+    });
+
+    return {
+      accessToken,
+      ...userResponseData,
+    };
+  }
+
   async verifyUser(user: User) {
     try {
       const _user = await this.userRepo.preload({
@@ -65,9 +103,17 @@ export class AuthService {
   }
 
   async resendVerificationEmail(resendVerificationDto: ResendVerificationDto) {
-    const { email } = resendVerificationDto;
-    const user = await this.userRepo.findOneBy({ email });
-    await this.sendVerificationEmail(user);
+    try {
+      const { email } = resendVerificationDto;
+      const user = await this.userRepo.findOneBy({ email });
+      if (!user) {
+        await this.mailService.sendAccountNotFound(email);
+        return;
+      }
+      await this.sendVerificationEmail(user);
+    } catch (e) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async sendVerificationEmail(user: User) {
