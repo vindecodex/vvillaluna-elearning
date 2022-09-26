@@ -30,11 +30,11 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
-  login(
+  authenticate(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    return this.authService.login(loginDto, response);
+    return this.authService.authenticate(loginDto, response);
   }
 
   @Get('signup/verification')

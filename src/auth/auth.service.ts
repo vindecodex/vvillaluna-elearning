@@ -54,7 +54,7 @@ export class AuthService {
     }
   }
 
-  async login(loginDto: LoginDto, response: Response) {
+  async authenticate(loginDto: LoginDto, response: Response) {
     const { email, password } = loginDto;
     const user = await this.userRepo.findOne({
       where: { email },
