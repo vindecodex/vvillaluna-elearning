@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpCode,
@@ -9,7 +8,6 @@ import {
   Res,
   UnauthorizedException,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/decorators/get-user.decorators';
@@ -22,7 +20,6 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AuthenticateDto } from './dto/authenticate.dto';
 
 @Controller()
-@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
