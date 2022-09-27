@@ -61,10 +61,10 @@ export class AuthService {
       where: { email },
     });
 
-    if (!user.isActive)
-      throw new BadRequestException('User is not yet verified');
     if (!user || !(await bcrypt.compare(password, user.password)))
       throw new UnauthorizedException('Invalid credentials');
+    if (!user.isActive)
+      throw new BadRequestException('User is not yet verified');
 
     const userResponseData: JwtPayload = {
       id: user.id,
