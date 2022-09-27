@@ -15,11 +15,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/decorators/get-user.decorators';
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 import { Response } from 'express';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { AuthenticateDto } from './dto/authenticate.dto';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
@@ -34,10 +34,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   authenticate(
-    @Body() loginDto: LoginDto,
+    @Body() authenticateDto: AuthenticateDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    return this.authService.authenticate(loginDto, response);
+    return this.authService.authenticate(authenticateDto, response);
   }
 
   @Post('logout')

@@ -12,11 +12,11 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from './providers/mail/mail.service';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
-import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 import { UserResponse } from './interface/user-response.interface';
+import { AuthenticateDto } from './dto/authenticate.dto';
 
 @Injectable()
 export class AuthService {
@@ -56,8 +56,8 @@ export class AuthService {
     }
   }
 
-  async authenticate(loginDto: LoginDto, response: Response) {
-    const { email, password } = loginDto;
+  async authenticate(authenticateDto: AuthenticateDto, response: Response) {
+    const { email, password } = authenticateDto;
     const user = await this.userRepo.findOne({
       where: { email },
     });
