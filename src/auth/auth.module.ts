@@ -8,8 +8,8 @@ import { User } from 'src/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { CurrentUserInterceptor } from './providers/currentUser.interceptor';
-import { JwtStrategy } from './providers/jwt/jwt.strategy';
 import { MailModule } from './providers/mail/mail.module';
+import { JwtStrategy } from './providers/strategy/jwt.strategy';
 
 @Module({
   imports: [
