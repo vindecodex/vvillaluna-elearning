@@ -11,11 +11,12 @@ import { UserCredentialsDto } from './dto/user-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from './providers/mail/mail.service';
-import { JwtPayload } from './providers/jwt/jwt-payload.interface';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { JwtPayload } from './interface/jwt-payload.interface';
+import { UserResponse } from './interface/user-response.interface';
 
 @Injectable()
 export class AuthService {
@@ -66,7 +67,7 @@ export class AuthService {
     if (!user.isActive)
       throw new BadRequestException('User is not yet verified');
 
-    const userResponseData: JwtPayload = {
+    const userResponseData: UserResponse = {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
@@ -74,7 +75,9 @@ export class AuthService {
       role: user.role,
     };
 
-    const accessToken = this.jwtService.sign(userResponseData);
+    const jwtPayload: JwtPayload = { ...userResponseData };
+
+    const accessToken = this.jwtService.sign(jwtPayload);
 
     response.cookie('token', accessToken, {
       httpOnly: true,
@@ -131,14 +134,14 @@ export class AuthService {
     }
   }
 
-  async verifyUser(user: User) {
+  async verifyUser(_user: User) {
     try {
-      const _user = await this.userRepo.preload({
-        ...user,
+      const user = await this.userRepo.preload({
+        ..._user,
         isActive: true,
       });
 
-      await this.userRepo.save(_user);
+      await this.userRepo.save(user);
     } catch (e) {
       throw e;
     }
