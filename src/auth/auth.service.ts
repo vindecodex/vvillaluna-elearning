@@ -122,7 +122,7 @@ export class AuthService {
         return;
       }
 
-      const jwtPayload: JwtPayload = {
+      const jwtPayload: Partial<JwtPayload> = {
         id: user.id,
       };
 
@@ -163,7 +163,7 @@ export class AuthService {
   }
 
   async sendVerificationEmail(user: User) {
-    const jwtPayload: JwtPayload = {
+    const jwtPayload: Partial<JwtPayload> = {
       id: user.id,
     };
     const verificationToken = this.jwtService.sign(jwtPayload);
