@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -39,21 +40,22 @@ describe('UsersController', () => {
     expect(usersController).toBeDefined();
   });
 
-  describe('findAll', () => {
+  describe('usersService.findAll', () => {
     it('should return list of users', async () => {
+      const paginationQuery: PaginationQueryDto = { page: 1, limit: 5 };
       const expected = {
         data: [mockUser],
         totalCount: 1,
-        page: 1,
-        limit: 5,
+        page: paginationQuery.page,
+        limit: paginationQuery.limit,
       };
       usersService.findAll.mockResolvedValue(expected);
-      const result = await usersController.findAll();
+      const result = await usersController.findAll(paginationQuery);
       expect(result).toBe(expected);
     });
   });
 
-  describe('findOne', () => {
+  describe('usersService.findOne', () => {
     it('should return user', async () => {
       const expected = mockUser;
       usersService.findOne.mockResolvedValue(expected);
