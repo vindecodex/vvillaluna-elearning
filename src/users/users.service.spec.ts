@@ -72,7 +72,6 @@ describe('UsersService', () => {
 
     it('should return empty object if no users found', async () => {
       const expected = {};
-      const id = 'id';
       userRepo.findOne.mockResolvedValue(null);
       const result = await usersService.findOne('uuid');
       expect(result).toEqual(expected);

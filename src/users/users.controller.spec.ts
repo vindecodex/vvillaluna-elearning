@@ -14,7 +14,6 @@ const mockUser = {
   email: 'test@gmail.com',
   firstName: 'test',
   lastName: 'test',
-  salt: 'test',
   role: 'test',
 };
 
