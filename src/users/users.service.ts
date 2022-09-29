@@ -5,19 +5,22 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
-  async findAll() {
-    const users = await this.userRepo.find();
+  async findAll(paginationQuerDto: PaginationQueryDto) {
+    const { page = 1, limit = 5 } = paginationQuerDto;
+    const users = await this.userRepo.find({ skip: page - 1, take: limit });
+    const totalCount = await this.userRepo.countBy({ isActive: true });
     return {
       data: users,
-      totalCount: 1,
-      page: 1,
-      limit: 5,
+      totalCount,
+      page,
+      limit,
     };
   }
 
