@@ -15,7 +15,7 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
+    it('should return "Welcome to E-Learning API"', () => {
       expect(appController.welcome()).toBe('Welcome to E-Learning API');
     });
   });
