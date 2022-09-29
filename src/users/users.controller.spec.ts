@@ -40,7 +40,7 @@ describe('UsersController', () => {
     expect(usersController).toBeDefined();
   });
 
-  describe('usersService.findAll', () => {
+  describe('usersController.findAll', () => {
     it('should return list of users', async () => {
       const paginationQuery: PaginationQueryDto = { page: 1, limit: 5 };
       const expected = {
@@ -55,7 +55,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('usersService.findOne', () => {
+  describe('usersController.findOne', () => {
     it('should return user', async () => {
       const expected = mockUser;
       usersService.findOne.mockResolvedValue(expected);

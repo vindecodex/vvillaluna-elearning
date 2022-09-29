@@ -1,5 +1,10 @@
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import exp from 'constants';
 import { Repository } from 'typeorm';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { User } from './entities/user.entity';
@@ -41,7 +46,7 @@ describe('UsersService', () => {
     expect(usersService).toBeDefined();
   });
 
-  describe('userRepo.find', () => {
+  describe('usersService.findAll', () => {
     it('should return array of users', async () => {
       const paginationQuery: PaginationQueryDto = { page: 1, limit: 5 };
       const totalCount = 10;
@@ -55,6 +60,38 @@ describe('UsersService', () => {
       userRepo.countBy.mockResolvedValue(totalCount);
       const result = await usersService.findAll(paginationQuery);
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('usersService.findOne', () => {
+    it('should return user details', async () => {
+      const expected = mockUser;
+      userRepo.findOne.mockResolvedValue(expected);
+      const result = await usersService.findOne('uuid');
+      expect(result).toEqual(expected);
+    });
+
+    it('should return empty object if no users found', async () => {
+      const expected = {};
+      const id = 'id';
+      userRepo.findOne.mockResolvedValue(null);
+      const result = await usersService.findOne('uuid');
+      expect(result).toEqual(expected);
+    });
+
+    it('should throw BadRequestException error if id passed is not uuid format', async () => {
+      const classValidatorInvalidUUIDErrorCode = '22P02';
+      userRepo.findOne.mockRejectedValue({
+        code: classValidatorInvalidUUIDErrorCode,
+      });
+      expect(usersService.findOne('uuid')).rejects.toThrow(BadRequestException);
+    });
+
+    it('unhandled error should throw InternalServerErrorException', async () => {
+      userRepo.findOne.mockRejectedValue(false);
+      expect(usersService.findOne('uuid')).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });
