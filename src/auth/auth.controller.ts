@@ -71,7 +71,7 @@ export class AuthController {
 
   @Get('signup/verification')
   @UseGuards(AuthGuard('jwt'))
-  verifyAccount(@GetUser() user: User) {
+  verifyUser(@GetUser() user: User) {
     return this.authService.verifyUser(user);
   }
 

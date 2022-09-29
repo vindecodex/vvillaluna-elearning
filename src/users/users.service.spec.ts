@@ -82,12 +82,14 @@ describe('UsersService', () => {
       userRepo.findOne.mockRejectedValue({
         code: classValidatorInvalidUUIDErrorCode,
       });
-      expect(usersService.findOne('uuid')).rejects.toThrow(BadRequestException);
+      await expect(usersService.findOne('uuid')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('unhandled error should throw InternalServerErrorException', async () => {
       userRepo.findOne.mockRejectedValue(false);
-      expect(usersService.findOne('uuid')).rejects.toThrow(
+      await expect(usersService.findOne('uuid')).rejects.toThrow(
         InternalServerErrorException,
       );
     });
