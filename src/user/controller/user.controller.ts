@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { CookieAuthGuard } from 'src/common/guards/cookie-auth.guard';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { UserService } from '../service/user.service';
 
@@ -6,6 +7,7 @@ import { UserService } from '../service/user.service';
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
+  @UseGuards(CookieAuthGuard)
   findAll(@Query() paginationQueryDto: PaginationQueryDto) {
     return this.userService.findAll(paginationQueryDto);
   }

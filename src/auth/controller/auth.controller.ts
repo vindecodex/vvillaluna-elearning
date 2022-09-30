@@ -5,12 +5,11 @@ import {
   HttpCode,
   Post,
   Query,
-  Res,
-  UnauthorizedException,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Response } from 'express';
+import { Request } from 'express';
 import { GetUser } from '../../decorators/get-user.decorators';
 import { User } from '../../user/entities/user.entity';
 import { AuthService } from '../service/auth.service';
@@ -18,6 +17,7 @@ import { AuthenticateDto } from '../dto/authenticate.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { UserCredentialsDto } from '../dto/user-credentials.dto';
+import { LocalAuthGuard } from '../guards/local-auth.guard';
 
 @Controller()
 export class AuthController {
@@ -30,21 +30,16 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
-  authenticate(
-    @Body() authenticateDto: AuthenticateDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.authenticate(authenticateDto, response);
+  @UseGuards(LocalAuthGuard)
+  authenticate(@Body() authenticateDto: AuthenticateDto) {
+    return this.authService.authenticate(authenticateDto);
   }
 
   @Post('logout')
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(200)
-  logout(
-    @GetUser() user: User,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.logout(user, response);
+  logout(@GetUser() user: User, @Req() request: Request) {
+    return this.authService.logout(user, request);
   }
 
   @Get('password')

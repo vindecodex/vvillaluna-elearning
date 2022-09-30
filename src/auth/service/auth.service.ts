@@ -11,7 +11,7 @@ import { UserCredentialsDto } from '../dto/user-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
-import { Response } from 'express';
+import { Request } from 'express';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { AuthenticateDto } from '../dto/authenticate.dto';
 import { UserResponse } from '../interfaces/user-response.interface';
@@ -56,7 +56,7 @@ export class AuthService {
     }
   }
 
-  async authenticate(authenticateDto: AuthenticateDto, response: Response) {
+  async authenticate(authenticateDto: AuthenticateDto) {
     const { email, password } = authenticateDto;
     const user = await this.userRepo.findOne({
       where: { email },
@@ -79,20 +79,18 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign(jwtPayload);
 
-    response.cookie('token', accessToken, {
-      httpOnly: true,
-      maxAge: 3600 * 24 * 1000,
-    });
-
     return {
       accessToken,
       ...userResponseData,
     };
   }
 
-  async logout(user: User, response: Response) {
+  async logout(user: User, request: Request) {
     if (!user) throw new UnauthorizedException();
-    response.clearCookie('token');
+    request.logOut((err) => {
+      if (err) throw new InternalServerErrorException();
+    });
+    request.session.cookie.maxAge = 0;
     return {
       status: 'success',
       message: "You've been logged out!",
