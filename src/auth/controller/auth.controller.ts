@@ -44,14 +44,7 @@ export class AuthController {
     @GetUser() user: User,
     @Res({ passthrough: true }) response: Response,
   ) {
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    response.clearCookie('token');
-    return {
-      status: 'success',
-      message: "You've been logged out!",
-    };
+    return this.authService.logout(user, response);
   }
 
   @Get('password')

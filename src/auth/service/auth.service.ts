@@ -90,6 +90,15 @@ export class AuthService {
     };
   }
 
+  async logout(user: User, response: Response) {
+    if (!user) throw new UnauthorizedException();
+    response.clearCookie('token');
+    return {
+      status: 'success',
+      message: "You've been logged out!",
+    };
+  }
+
   async resetPassword(_user: User, resetPasswordDto: ResetPasswordDto) {
     const { password, verifyPassword } = resetPasswordDto;
     if (password !== verifyPassword) {
