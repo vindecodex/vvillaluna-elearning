@@ -82,10 +82,7 @@ describe('AuthController', () => {
         accessToken: 'test',
       };
       authService.authenticate.mockResolvedValue(expected);
-      const result = await authController.authenticate(
-        authenticateDto,
-        response,
-      );
+      const result = await authController.authenticate(authenticateDto);
       expect(result).toEqual(expected);
     });
   });
