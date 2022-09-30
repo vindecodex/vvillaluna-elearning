@@ -10,14 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../decorators/get-user.decorators';
-import { User } from '../users/entities/user.entity';
-import { AuthService } from './auth.service';
-import { ResendVerificationDto } from './dto/resend-verification.dto';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
 import { Response } from 'express';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { AuthenticateDto } from './dto/authenticate.dto';
+import { GetUser } from '../../decorators/get-user.decorators';
+import { User } from '../../user/entities/user.entity';
+import { AuthService } from '../service/auth.service';
+import { AuthenticateDto } from '../dto/authenticate.dto';
+import { ResendVerificationDto } from '../dto/resend-verification.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { UserCredentialsDto } from '../dto/user-credentials.dto';
 
 @Controller()
 export class AuthController {

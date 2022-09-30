@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { AuthenticateDto } from './dto/authenticate.dto';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
 import { Response } from 'express';
 import { UnauthorizedException } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { User } from '../../user/entities/user.entity';
+import { AuthService } from '../service/auth.service';
+import { UserCredentialsDto } from '../dto/user-credentials.dto';
+import { AuthenticateDto } from '../dto/authenticate.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { ResendVerificationDto } from '../dto/resend-verification.dto';
 
 type MockAuthService<T = any> = Partial<Record<keyof T, jest.Mock>> | T;
 const mockAuthService = (): MockAuthService => ({

@@ -5,9 +5,9 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaginationQueryDto } from './dto/pagination-query.dto';
-import { User } from './entities/user.entity';
-import { UsersService } from './users.service';
+import { PaginationQueryDto } from '../dto/pagination-query.dto';
+import { User } from '../entities/user.entity';
+import { UserService } from './user.service';
 
 type MockUserRepo<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const mockUserRepo = (): MockUserRepo => ({
@@ -25,19 +25,19 @@ const mockUser = {
   role: 'test',
 };
 
-describe('UsersService', () => {
-  let usersService: UsersService;
+describe('UserService', () => {
+  let usersService: UserService;
   let userRepo: MockUserRepo;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
+        UserService,
         { provide: getRepositoryToken(User), useFactory: mockUserRepo },
       ],
     }).compile();
 
-    usersService = module.get<UsersService>(UsersService);
+    usersService = module.get<UserService>(UserService);
     userRepo = module.get<MockUserRepo>(getRepositoryToken(User));
   });
 

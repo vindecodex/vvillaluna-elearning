@@ -4,12 +4,12 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { CurrentUserInterceptor } from './providers/currentUser.interceptor';
-import { MailModule } from './providers/mail/mail.module';
-import { JwtStrategy } from './providers/strategy/jwt.strategy';
+import { CurrentUserInterceptor } from 'src/interceptors/currentUser.interceptor';
+import { MailModule } from 'src/mail/mail.module';
+import { User } from '../user/entities/user.entity';
+import { AuthController } from './controller/auth.controller';
+import { AuthService } from './service/auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [

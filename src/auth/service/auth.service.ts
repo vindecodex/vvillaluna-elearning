@@ -5,18 +5,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
+import { UserCredentialsDto } from '../dto/user-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { MailService } from './providers/mail/mail.service';
-import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { Response } from 'express';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { JwtPayload } from './interface/jwt-payload.interface';
-import { UserResponse } from './interface/user-response.interface';
-import { AuthenticateDto } from './dto/authenticate.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { AuthenticateDto } from '../dto/authenticate.dto';
+import { UserResponse } from '../interfaces/user-response.interface';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { MailService } from '../../mail/mail.service';
 
 @Injectable()
 export class AuthService {

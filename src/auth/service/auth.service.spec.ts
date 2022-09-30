@@ -7,12 +7,12 @@ import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { AuthService } from './auth.service';
-import { AuthenticateDto } from './dto/authenticate.dto';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
-import { MailService } from './providers/mail/mail.service';
-import { ResetPasswordDto } from './dto/reset-password.dto';
+import { MailService } from '../../mail/mail.service';
+import { UserCredentialsDto } from '../dto/user-credentials.dto';
+import { AuthenticateDto } from '../dto/authenticate.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
 
 type MockType<T = any> = Partial<Record<keyof T, jest.Mock>> | T;
 type MockUserRepo = MockType;

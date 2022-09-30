@@ -1,10 +1,10 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { PaginationQueryDto } from './dto/pagination-query.dto';
-import { UsersService } from './users.service';
+import { PaginationQueryDto } from '../dto/pagination-query.dto';
+import { UserService } from '../service/user.service';
 
 @Controller('users')
-export class UsersController {
-  constructor(private userService: UsersService) {}
+export class UserController {
+  constructor(private userService: UserService) {}
   @Get()
   findAll(@Query() paginationQueryDto: PaginationQueryDto) {
     return this.userService.findAll(paginationQueryDto);
