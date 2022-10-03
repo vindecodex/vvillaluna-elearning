@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  CACHE_MANAGER,
+  Inject,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -17,6 +19,7 @@ import { AuthenticateDto } from '../dto/authenticate.dto';
 import { UserResponse } from '../interfaces/user-response.interface';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { MailService } from '../../mail/mail.service';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +27,7 @@ export class AuthService {
     @InjectRepository(User) private userRepo: Repository<User>,
     private mailService: MailService,
     private jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
   async createUser(userCredentialsDto: UserCredentialsDto) {
@@ -85,15 +89,19 @@ export class AuthService {
     };
   }
 
-  async logout(user: User, request: Request) {
-    if (!user) throw new UnauthorizedException();
-    request.logOut((err) => {
-      if (err) throw new InternalServerErrorException();
-    });
-    request.session.cookie.maxAge = 0;
+  async logout(token: string) {
+    const accessToken = token.replace('Bearer ', '');
+
+    const isBlockListed = await this.cacheService.get(accessToken);
+
+    if (isBlockListed) {
+      throw new UnauthorizedException();
+    }
+
+    await this.cacheService.set(accessToken, accessToken, { ttl: 3600 * 24 });
     return {
       status: 'success',
-      message: "You've been logged out!",
+      message: "You' been logged out!",
     };
   }
 

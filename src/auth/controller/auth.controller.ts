@@ -2,14 +2,13 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   HttpCode,
   Post,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 import { GetUser } from '../../decorators/get-user.decorators';
 import { User } from '../../user/entities/user.entity';
 import { AuthService } from '../service/auth.service';
@@ -36,10 +35,9 @@ export class AuthController {
   }
 
   @Post('logout')
-  @UseGuards(AuthGuard('jwt'))
   @HttpCode(200)
-  logout(@GetUser() user: User, @Req() request: Request) {
-    return this.authService.logout(user, request);
+  logout(@Headers('authorization') token: string) {
+    return this.authService.logout(token);
   }
 
   @Get('password')
