@@ -8,7 +8,6 @@ import { MailModule } from 'src/mail/mail.module';
 import { UserModule } from 'src/user/user.module';
 import { User } from '../user/entities/user.entity';
 import { AuthController } from './controller/auth.controller';
-import { LocalAuthSerializer } from './serializer/local-auth.serializer';
 import { AuthService } from './service/auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
@@ -32,7 +31,6 @@ import { LocalStrategy } from './strategies/local.strategy';
     AuthService,
     JwtStrategy,
     LocalStrategy,
-    LocalAuthSerializer,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
