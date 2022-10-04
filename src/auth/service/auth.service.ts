@@ -15,11 +15,12 @@ import { JwtService } from '@nestjs/jwt';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { AuthenticateDto } from '../dto/authenticate.dto';
-import { UserResponse } from '../interfaces/user-response.interface';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { MailService } from '../../mail/mail.service';
 import { Cache } from 'cache-manager';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { AuthResponse } from '../interfaces/auth-response.interface';
+import { ResponseObject } from 'src/shared/interfaces/response-object.interface';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
-  async createUser(userCredentialsDto: UserCredentialsDto) {
+  async createUser(userCredentialsDto: UserCredentialsDto): Promise<User> {
     const { password, verifyPassword } = userCredentialsDto;
     if (password !== verifyPassword) {
       throw new BadRequestException('Password did not match');
@@ -60,7 +61,7 @@ export class AuthService {
     }
   }
 
-  async authenticate(authenticateDto: AuthenticateDto) {
+  async authenticate(authenticateDto: AuthenticateDto): Promise<AuthResponse> {
     const { email, password } = authenticateDto;
     const user = await this.userRepo.findOne({
       where: { email },
@@ -71,7 +72,7 @@ export class AuthService {
     if (!user.isActive)
       throw new BadRequestException('User is not yet verified');
 
-    const userResponseData: UserResponse = {
+    const userResponseData: AuthResponse = {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
@@ -89,7 +90,7 @@ export class AuthService {
     };
   }
 
-  async logout(token: string) {
+  async logout(token: string): Promise<ResponseObject> {
     const accessToken = token.replace('Bearer ', '');
 
     const isBlockListed = await this.cacheService.get(accessToken);
@@ -105,7 +106,10 @@ export class AuthService {
     };
   }
 
-  async resetPassword(_user: User, resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(
+    u: User,
+    resetPasswordDto: ResetPasswordDto,
+  ): Promise<ResponseObject> {
     const { password, verifyPassword } = resetPasswordDto;
     if (password !== verifyPassword) {
       throw new BadRequestException('Verify password did not match');
@@ -115,7 +119,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await this.userRepo.preload({
-      ..._user,
+      ...u,
       password: hashedPassword,
       salt,
     });
@@ -128,7 +132,7 @@ export class AuthService {
     return { status: 'success' };
   }
 
-  async requestResetPassword(email: string) {
+  async requestResetPassword(email: string): Promise<ResponseObject> {
     try {
       if (!email) throw new BadRequestException('Email not provided');
       const user = await this.userRepo.findOneBy({ email });
@@ -144,15 +148,17 @@ export class AuthService {
       const resetPasswordToken = this.jwtService.sign(jwtPayload);
 
       await this.mailService.sendResetPasswordLink(email, resetPasswordToken);
+
+      return { status: 'success' };
     } catch (e) {
       throw e;
     }
   }
 
-  async verifyUser(_user: User) {
+  async verifyUser(u: User): Promise<void> {
     try {
       const user = await this.userRepo.preload({
-        ..._user,
+        ...u,
         isActive: true,
       });
 
@@ -162,7 +168,9 @@ export class AuthService {
     }
   }
 
-  async resendVerificationEmail(resendVerificationDto: ResendVerificationDto) {
+  async resendVerificationEmail(
+    resendVerificationDto: ResendVerificationDto,
+  ): Promise<void> {
     try {
       const { email } = resendVerificationDto;
       const user = await this.userRepo.findOneBy({ email });
@@ -177,7 +185,7 @@ export class AuthService {
     }
   }
 
-  async sendVerificationEmail(user: User) {
+  async sendVerificationEmail(user: User): Promise<void> {
     const jwtPayload: Partial<JwtPayload> = {
       id: user.id,
     };

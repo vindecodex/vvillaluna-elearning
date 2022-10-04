@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { Repository } from 'typeorm';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
@@ -13,7 +14,9 @@ import { User } from '../entities/user.entity';
 export class UserService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
-  async findAll(paginationQuerDto: PaginationQueryDto) {
+  async findAll(
+    paginationQuerDto: PaginationQueryDto,
+  ): Promise<ResponseList<User>> {
     const { page = 1, limit = 5 } = paginationQuerDto;
     const users = await this.userRepo.find({ skip: page - 1, take: limit });
     const totalCount = await this.userRepo.countBy({ isActive: true });
@@ -25,7 +28,7 @@ export class UserService {
     };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<User | object> {
     try {
       const user = await this.userRepo.findOne({ where: { id } });
       return user ? user : {};
