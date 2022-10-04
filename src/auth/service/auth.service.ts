@@ -19,6 +19,7 @@ import { UserResponse } from '../interfaces/user-response.interface';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { MailService } from '../../mail/mail.service';
 import { Cache } from 'cache-manager';
+import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
 
 @Injectable()
 export class AuthService {
@@ -51,7 +52,7 @@ export class AuthService {
 
       return user;
     } catch (e) {
-      if (e.code === '23505') {
+      if (e.code === PostgresErrorCode.DUPLICATE) {
         throw new BadRequestException('User already exist');
       } else {
         throw new InternalServerErrorException();

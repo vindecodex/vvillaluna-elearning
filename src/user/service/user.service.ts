@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
 import { Repository } from 'typeorm';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
@@ -29,7 +30,7 @@ export class UserService {
       const user = await this.userRepo.findOne({ where: { id } });
       return user ? user : {};
     } catch (e) {
-      if (e.code === '22P02') {
+      if (e.code === PostgresErrorCode.INVALID_INPUT) {
         throw new BadRequestException('Invalid ID format provided');
       } else {
         throw new InternalServerErrorException();

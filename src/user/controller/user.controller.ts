@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { CookieAuthGuard } from 'src/common/guards/cookie-auth.guard';
+import { CookieAuthGuard } from 'src/shared/guards/cookie-auth.guard';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { UserService } from '../service/user.service';
 
