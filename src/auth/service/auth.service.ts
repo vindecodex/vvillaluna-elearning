@@ -13,7 +13,6 @@ import { UserCredentialsDto } from '../dto/user-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
-import { Request } from 'express';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { AuthenticateDto } from '../dto/authenticate.dto';
 import { UserResponse } from '../interfaces/user-response.interface';
