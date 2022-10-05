@@ -1,7 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AppAbility } from 'src/authorization/casl-ability.factory';
-import { Action } from 'src/authorization/enums/action.enum';
+import { ReadUserPolicyHandler } from 'src/authorization/policy-handler/read-user-policy.handler';
 import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
 import { PoliciesGuard } from 'src/shared/guards/policies.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
@@ -21,7 +20,7 @@ export class UserController {
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'), PoliciesGuard)
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.READ, User))
+  @CheckPolicies(ReadUserPolicyHandler)
   async findOne(@Param('id') id: string): Promise<User | object> {
     return this.userService.findOne(id);
   }
