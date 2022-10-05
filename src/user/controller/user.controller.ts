@@ -1,5 +1,9 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { CookieAuthGuard } from 'src/shared/guards/cookie-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { AppAbility } from 'src/authorization/casl-ability.factory';
+import { Action } from 'src/authorization/enums/action.enum';
+import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
+import { PoliciesGuard } from 'src/shared/guards/policies.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
@@ -9,7 +13,6 @@ import { UserService } from '../service/user.service';
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
-  @UseGuards(CookieAuthGuard)
   findAll(
     @Query() paginationQueryDto: PaginationQueryDto,
   ): Promise<ResponseList<User>> {
@@ -17,6 +20,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.READ, User))
   async findOne(@Param('id') id: string): Promise<User | object> {
     return this.userService.findOne(id);
   }
