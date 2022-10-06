@@ -9,6 +9,8 @@ import { MailModule } from './mail/mail.module';
 import { RedisModule } from './redis/redis.module';
 import { CaslModule } from './authorization/casl.module';
 import { SubjectModule } from './subject/subject.module';
+import { CourseModule } from './course/course.module';
+import { CourseController } from './controller/course/course.controller';
 
 @Module({
   imports: [
@@ -32,8 +34,9 @@ import { SubjectModule } from './subject/subject.module';
     RedisModule,
     CaslModule,
     SubjectModule,
+    CourseModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, CourseController],
   providers: [AppService],
 })
 export class AppModule {}
