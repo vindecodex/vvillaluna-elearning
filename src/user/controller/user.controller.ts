@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ReadUserPolicyHandler } from 'src/authorization/policy-handler/read-user-policy.handler';
+import { ReadUserPolicyHandler } from 'src/authorization/policy-handler/user/read-user-policy.handler';
 import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
 import { PoliciesGuard } from 'src/shared/guards/policies.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';

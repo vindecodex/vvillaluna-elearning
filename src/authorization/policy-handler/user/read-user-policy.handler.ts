@@ -1,8 +1,8 @@
-import { AppAbility } from '../casl-ability.factory';
-import { Action } from '../enums/action.enum';
-import { IPolicyHandler } from './policy-handler.interface';
+import { AppAbility } from '../../casl-ability.factory';
+import { Action } from '../../enums/action.enum';
 import { Request } from 'express';
 import { User } from 'src/user/entities/user.entity';
+import { IPolicyHandler } from '../../interfaces/policy-handler.interface';
 
 export class ReadUserPolicyHandler implements IPolicyHandler {
   constructor(private request: Request) {}
