@@ -10,7 +10,7 @@ import { RedisModule } from './redis/redis.module';
 import { CaslModule } from './authorization/casl.module';
 import { SubjectModule } from './subject/subject.module';
 import { CourseModule } from './course/course.module';
-import { CourseController } from './controller/course/course.controller';
+import { EnrollmentModule } from './enrollment/enrollment.module';
 
 @Module({
   imports: [
@@ -35,8 +35,9 @@ import { CourseController } from './controller/course/course.controller';
     CaslModule,
     SubjectModule,
     CourseModule,
+    EnrollmentModule,
   ],
-  controllers: [AppController, CourseController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
