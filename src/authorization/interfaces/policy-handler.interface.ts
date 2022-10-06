@@ -1,5 +1,5 @@
-import { AppAbility } from '../casl-ability.factory';
+import { AppAbility } from '../types/app-ability-builder.type';
 
-export interface IPolicyHandler {
+export interface PolicyHandler {
   handle(ability: AppAbility): boolean;
 }

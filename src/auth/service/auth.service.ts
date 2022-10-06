@@ -18,9 +18,9 @@ import { AuthenticateDto } from '../dto/authenticate.dto';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { MailService } from '../../mail/mail.service';
 import { Cache } from 'cache-manager';
-import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { AuthResponse } from '../interfaces/auth-response.interface';
-import { ResponseObject } from 'src/shared/interfaces/response-object.interface';
+import { ResponseObject } from '../../shared/interfaces/response-object.interface';
 
 @Injectable()
 export class AuthService {

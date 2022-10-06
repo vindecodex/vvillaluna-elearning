@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Role } from '../../authorization/enums/role.enum';
 import { Column } from 'typeorm';
 
 export class UserCredentialsDto {
@@ -16,7 +17,7 @@ export class UserCredentialsDto {
 
   @IsString()
   @IsNotEmpty()
-  role: string;
+  role: Role;
 
   @Column()
   @IsNotEmpty()

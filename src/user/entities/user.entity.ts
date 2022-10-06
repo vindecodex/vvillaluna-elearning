@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
+import { Role } from '../../authorization/enums/role.enum';
 import {
   Column,
   CreateDateColumn,
@@ -32,7 +33,7 @@ export class User {
   lastName: string;
 
   @Column()
-  role: string;
+  role: Role;
 
   @Column()
   @Exclude()

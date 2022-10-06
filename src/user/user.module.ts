@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CaslAbilityFactory } from 'src/authorization/casl-ability.factory';
+import { CaslAbilityFactory } from '../authorization/factories/casl-ability.factory';
 import { UserController } from './controller/user.controller';
 import { User } from './entities/user.entity';
 import { UserService } from './service/user.service';

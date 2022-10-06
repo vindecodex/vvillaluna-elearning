@@ -15,10 +15,10 @@ import { AuthenticateDto } from '../dto/authenticate.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { UserCredentialsDto } from '../dto/user-credentials.dto';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { GetUser } from '../../shared/decorators/get-user.decorator';
 import { AuthResponse } from '../interfaces/auth-response.interface';
-import { ResponseObject } from 'src/shared/interfaces/response-object.interface';
-import { LocalAuthGuard } from 'src/shared/guards/local-auth.guard';
+import { ResponseObject } from '../../shared/interfaces/response-object.interface';
+import { LocalAuthGuard } from '../../shared/guards/local-auth.guard';
 
 @Controller()
 export class AuthController {

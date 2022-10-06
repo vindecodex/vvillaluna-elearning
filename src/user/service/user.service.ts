@@ -4,8 +4,8 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
 import { Repository } from 'typeorm';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';

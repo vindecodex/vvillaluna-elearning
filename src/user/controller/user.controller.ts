@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ReadUserPolicyHandler } from 'src/authorization/policy-handler/user/read-user-policy.handler';
-import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
-import { PoliciesGuard } from 'src/shared/guards/policies.guard';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
+import { ReadUserPolicyHandler } from '../../authorization/policy-handler/user/read-user-policy.handler';
+import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
+import { PoliciesGuard } from '../../shared/guards/policies.guard';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
 import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
 import { UserService } from '../service/user.service';
