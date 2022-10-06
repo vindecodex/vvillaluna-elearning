@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { RedisModule } from './redis/redis.module';
 import { CaslModule } from './authorization/casl.module';
+import { SubjectModule } from './subject/subject.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CaslModule } from './authorization/casl.module';
     MailModule,
     RedisModule,
     CaslModule,
+    SubjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],
