@@ -5,9 +5,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Subject } from '../../subject/entities/subject.entity';
 
 @Entity()
 export class User {
@@ -46,4 +48,7 @@ export class User {
   @UpdateDateColumn()
   @Exclude()
   updatedAt: Date;
+
+  @OneToMany(() => Subject, (subject) => subject.owner)
+  subjects: Subject[];
 }

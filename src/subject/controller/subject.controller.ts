@@ -1,4 +1,64 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { ResponseList } from 'src/shared/interfaces/response-list.interface';
+import { User } from 'src/user/entities/user.entity';
+import { CreateSubjectDto } from '../dto/create-subject.dto';
+import { QueryOptionsDto } from '../dto/query-options.dto';
+import { UpdateSubjectDto } from '../dto/update-subject.dto';
+import { Subject } from '../entities/subject.entity';
+import { SubjectService } from '../service/subject.service';
 
-@Controller('subject')
-export class SubjectController {}
+@Controller('subjects')
+export class SubjectController {
+  constructor(private subjectService: SubjectService) {}
+
+  @Get()
+  async findAll(
+    @Query() queryOptions: QueryOptionsDto,
+  ): Promise<ResponseList<Subject>> {
+    return this.subjectService.findAll(queryOptions);
+  }
+
+  @Get(':id')
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Subject | object> {
+    return this.subjectService.findOne(id);
+  }
+
+  @Post()
+  @UseGuards(AuthGuard('jwt'))
+  async create(
+    @Body() createSubjectDto: CreateSubjectDto,
+    @GetUser() user: User,
+  ): Promise<Subject> {
+    return this.subjectService.create(createSubjectDto, user);
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSubjectDto: UpdateSubjectDto,
+  ) {
+    return this.subjectService.update(id, updateSubjectDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return this.subjectService.delete(id);
+  }
+}
