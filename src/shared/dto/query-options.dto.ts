@@ -23,7 +23,4 @@ export class QueryOptionsDto {
 
   @IsOptional()
   published: boolean;
-
-  @IsOptional()
-  courses: boolean;
 }

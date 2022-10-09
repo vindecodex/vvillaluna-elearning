@@ -15,7 +15,7 @@ import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { CreateSubjectDto } from '../dto/create-subject.dto';
-import { QueryOptionsDto } from '../dto/query-options.dto';
+import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { UpdateSubjectDto } from '../dto/update-subject.dto';
 import { Subject } from '../entities/subject.entity';
 import { SubjectService } from '../service/subject.service';
@@ -26,9 +26,9 @@ export class SubjectController {
 
   @Get()
   async findAll(
-    @Query() queryOptions: QueryOptionsDto,
+    @Query() subjectQueryDto: SubjectQueryDto,
   ): Promise<ResponseList<Subject>> {
-    return this.subjectService.findAll(queryOptions);
+    return this.subjectService.findAll(subjectQueryDto);
   }
 
   @Get(':id')
@@ -52,13 +52,13 @@ export class SubjectController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateSubjectDto: UpdateSubjectDto,
-  ) {
+  ): Promise<Subject> {
     return this.subjectService.update(id, updateSubjectDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.subjectService.delete(id);
   }
 }

@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Subject } from '../../subject/entities/subject.entity';
+import { Course } from 'src/course/entities/course.entity';
 
 @Entity()
 export class User {
@@ -51,4 +52,7 @@ export class User {
 
   @OneToMany(() => Subject, (subject) => subject.owner)
   subjects: Subject[];
+
+  @OneToMany(() => Course, (course) => course.author)
+  courses: Course[];
 }

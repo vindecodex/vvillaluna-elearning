@@ -9,7 +9,7 @@ import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateSubjectDto } from '../dto/create-subject.dto';
-import { QueryOptionsDto } from '../dto/query-options.dto';
+import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { UpdateSubjectDto } from '../dto/update-subject.dto';
 import { Subject } from '../entities/subject.entity';
 
@@ -20,8 +20,10 @@ export class SubjectService {
     private subjectRepo: Repository<Subject>,
   ) {}
 
-  async findAll(queryOptions: QueryOptionsDto): Promise<ResponseList<Subject>> {
-    const { page = 1, limit = 5 } = queryOptions;
+  async findAll(
+    subjectQueryDto: SubjectQueryDto,
+  ): Promise<ResponseList<Subject>> {
+    const { page = 1, limit = 5 } = subjectQueryDto;
     const subjects = await this.subjectRepo.find({
       skip: page - 1,
       take: limit,
@@ -91,7 +93,7 @@ export class SubjectService {
     }
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<void> {
     const { affected } = await this.subjectRepo.delete(id);
     if (affected > 0) return;
     throw new NotFoundException('Subject not found.');

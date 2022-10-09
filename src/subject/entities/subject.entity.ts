@@ -1,9 +1,11 @@
+import { Course } from 'src/course/entities/course.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,4 +29,7 @@ export class Subject {
 
   @ManyToOne(() => User, (user) => user.subjects)
   owner: User;
+
+  @OneToMany(() => Course, (course) => course.subject)
+  courses: Course[];
 }
