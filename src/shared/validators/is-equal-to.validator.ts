@@ -7,6 +7,9 @@ import {
 /*
  * Guide on creating custom decorators:
  * https://github.com/typestack/class-validator#custom-validation-decorators
+ *
+ * Idea about the issue of checking equality of two fields:
+ * https://github.com/typestack/class-validator/issues/486#issuecomment-606767275
  */
 export const IsEqualTo =
   (property: string, validationOptions?: ValidationOptions) =>
