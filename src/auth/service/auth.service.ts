@@ -32,10 +32,7 @@ export class AuthService {
   ) {}
 
   async createUser(userCredentialsDto: UserCredentialsDto): Promise<User> {
-    const { password, verifyPassword } = userCredentialsDto;
-    if (password !== verifyPassword) {
-      throw new BadRequestException('Password did not match');
-    }
+    const { password } = userCredentialsDto;
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -110,10 +107,7 @@ export class AuthService {
     u: User,
     resetPasswordDto: ResetPasswordDto,
   ): Promise<ResponseObject> {
-    const { password, verifyPassword } = resetPasswordDto;
-    if (password !== verifyPassword) {
-      throw new BadRequestException('Verify password did not match');
-    }
+    const { password } = resetPasswordDto;
 
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -134,7 +128,6 @@ export class AuthService {
 
   async requestResetPassword(email: string): Promise<ResponseObject> {
     try {
-      if (!email) throw new BadRequestException('Email not provided');
       const user = await this.userRepo.findOneBy({ email });
       if (!user) {
         await this.mailService.sendAccountNotFound(email);

@@ -1,6 +1,7 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { Role } from '../../authorization/enums/role.enum';
 import { Column } from 'typeorm';
+import { IsEqualTo } from 'src/shared/validators/is-equal-to.validator';
 
 export class UserCredentialsDto {
   @IsEmail()
@@ -11,6 +12,7 @@ export class UserCredentialsDto {
   password: string;
 
   @IsNotEmpty()
+  @IsEqualTo('password')
   verifyPassword: string;
 
   @IsNotEmpty()

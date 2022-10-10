@@ -19,6 +19,7 @@ import { GetUser } from '../../shared/decorators/get-user.decorator';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import { ResponseObject } from '../../shared/interfaces/response-object.interface';
 import { LocalAuthGuard } from '../../shared/guards/local-auth.guard';
+import { RequestResetPasswordDto } from '../dto/request-reset-password.dto';
 
 @Controller()
 export class AuthController {
@@ -45,8 +46,10 @@ export class AuthController {
   }
 
   @Get('password')
-  requestResetPassword(@Query('email') email: string): Promise<ResponseObject> {
-    return this.authService.requestResetPassword(email);
+  requestResetPassword(
+    @Query('email') dto: RequestResetPasswordDto,
+  ): Promise<ResponseObject> {
+    return this.authService.requestResetPassword(dto.email);
   }
 
   @Post('password')
