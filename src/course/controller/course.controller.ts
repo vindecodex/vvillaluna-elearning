@@ -8,9 +8,12 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
@@ -39,19 +42,25 @@ export class CourseController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('icon'))
   async create(
     @Body() createCourseDto: CreateCourseDto,
     @GetUser() user: User,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<Course> {
+    createCourseDto.icon = file.filename;
     return this.courseService.create(createCourseDto, user);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('icon'))
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCourseDto: UpdateCourseDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<Course> {
+    updateCourseDto.icon = file.filename;
     return this.courseService.update(id, updateCourseDto);
   }
 

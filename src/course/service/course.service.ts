@@ -2,9 +2,9 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  Post,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Constants } from 'src/shared/enums/constants.enum';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
@@ -48,7 +48,7 @@ export class CourseService {
         subject: { id: subjectId },
         author: { id: user.id },
         isPublished: false,
-        icon,
+        icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
       });
       await this.courseRepo.save(course);
       return course;
@@ -63,9 +63,11 @@ export class CourseService {
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
     try {
+      const { icon } = updateCourseDto;
       const course = await this.courseRepo.preload({
         id,
         ...updateCourseDto,
+        icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
       });
       if (!course) throw new NotFoundException('Subject not found.');
 
