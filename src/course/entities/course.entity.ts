@@ -1,3 +1,4 @@
+import { Module } from 'src/module/entities/module.entity';
 import { Subject } from 'src/subject/entities/subject.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -37,4 +39,7 @@ export class Course {
 
   @ManyToOne(() => User, (user) => user.courses)
   author: User;
+
+  @OneToMany(() => Module, (module) => module.course)
+  modules: Module[];
 }

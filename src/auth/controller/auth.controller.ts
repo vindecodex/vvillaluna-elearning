@@ -47,7 +47,7 @@ export class AuthController {
 
   @Get('password')
   requestResetPassword(
-    @Query('email') dto: RequestResetPasswordDto,
+    @Query() dto: RequestResetPasswordDto,
   ): Promise<ResponseObject> {
     return this.authService.requestResetPassword(dto.email);
   }

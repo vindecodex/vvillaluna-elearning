@@ -11,6 +11,7 @@ import { CaslModule } from './authorization/casl.module';
 import { SubjectModule } from './subject/subject.module';
 import { CourseModule } from './course/course.module';
 import { EnrollmentModule } from './enrollment/enrollment.module';
+import { ModuleModule } from './module/module.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
     SubjectModule,
     CourseModule,
     EnrollmentModule,
+    ModuleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
