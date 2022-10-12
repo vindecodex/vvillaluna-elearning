@@ -12,6 +12,7 @@ import {
 import { Subject } from '../../subject/entities/subject.entity';
 import { Course } from 'src/course/entities/course.entity';
 import { Module } from 'src/module/entities/module.entity';
+import { Content } from 'src/content/entities/content.entity';
 
 @Entity()
 export class User {
@@ -59,4 +60,7 @@ export class User {
 
   @OneToMany(() => Module, (module) => module.author)
   modules: Module[];
+
+  @OneToMany(() => Content, (content) => content.author)
+  contents: Content[];
 }

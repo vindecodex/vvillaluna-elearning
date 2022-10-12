@@ -1,26 +1,24 @@
-import { Content } from 'src/content/entities/content.entity';
-import { Course } from 'src/course/entities/course.entity';
+import { Module } from 'src/module/entities/module.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Module {
+export class Content {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  title: string;
+  content: string;
 
   @Column()
-  duration: number;
+  type: string;
 
   @Column({ default: false })
   isPublished: boolean;
@@ -31,12 +29,9 @@ export class Module {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.modules)
+  @ManyToOne(() => User, (user) => user.contents)
   author: User;
 
-  @ManyToOne(() => Course, (course) => course.modules)
-  course: Course;
-
-  @OneToMany(() => Content, (content) => content.module)
-  contents: Content[];
+  @ManyToOne(() => Module, (module) => module.contents)
+  module: Module;
 }

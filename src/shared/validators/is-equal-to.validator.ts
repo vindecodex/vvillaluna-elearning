@@ -5,10 +5,13 @@ import {
 } from 'class-validator';
 
 /*
+ * Built to remove responsibility of input validation from service layer
+ * Example for: Password verfication or confirm email
+ *
  * Guide on creating custom decorators:
  * https://github.com/typestack/class-validator#custom-validation-decorators
  *
- * Idea about the issue of checking equality of two fields:
+ * Ideas helps to solve the issue of checking equality of two fields:
  * https://github.com/typestack/class-validator/issues/486#issuecomment-606767275
  */
 export const IsEqualTo =
