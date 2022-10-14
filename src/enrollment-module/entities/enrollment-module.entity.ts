@@ -10,13 +10,12 @@ export class EnrollmentModule {
   @Column({ default: false })
   isCompleted: boolean;
 
-  @ManyToOne(() => Module, (module) => module.enrollmentModules, {
-    cascade: true,
-  })
+  @ManyToOne(() => Module, (module) => module.enrollmentModules)
   module: Module;
 
   @ManyToOne(() => Enrollment, (enrollment) => enrollment.enrollmentModules, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   enrollment: Enrollment;
 }

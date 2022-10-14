@@ -84,11 +84,28 @@ export class EnrollmentService {
     return enrollment ? enrollment : {};
   }
 
-  update(id: number, updateEnrollmentDto: UpdateEnrollmentDto) {
-    return `This action updates a #${id} enrollment`;
+  async update(
+    id: number,
+    updateEnrollmentDto: UpdateEnrollmentDto,
+  ): Promise<EnrollmentModule> {
+    const { moduleId, isCompleted } = updateEnrollmentDto;
+    const moduleEnrollment = await this.enrollmentModuleRepo.findOneBy({
+      enrollment: { id },
+      module: { id: moduleId },
+    });
+    const updatedEnrollmentModule = await this.enrollmentModuleRepo.preload({
+      id: moduleEnrollment.id,
+      enrollment: { id },
+      module: { id: moduleId },
+      isCompleted,
+    });
+
+    return this.enrollmentModuleRepo.save(updatedEnrollmentModule);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} enrollment`;
+  async remove(id: number): Promise<void> {
+    const { affected } = await this.enrollmentRepo.delete(id);
+    if (affected > 0) return;
+    throw new NotFoundException('Enrollment not found.');
   }
 }

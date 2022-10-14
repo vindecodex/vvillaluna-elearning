@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { CreateEnrollmentDto } from '../dto/create-enrollment.dto';
@@ -42,15 +43,17 @@ export class EnrollmentController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   update(
     @Param('id') id: string,
     @Body() updateEnrollmentDto: UpdateEnrollmentDto,
-  ) {
+  ): Promise<EnrollmentModule> {
     return this.enrollmentService.update(+id, updateEnrollmentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @UseGuards(AuthGuard('jwt'))
+  remove(@Param('id') id: string): Promise<void> {
     return this.enrollmentService.remove(+id);
   }
 }
