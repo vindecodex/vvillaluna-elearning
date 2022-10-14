@@ -53,7 +53,7 @@ export class EnrollmentController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  remove(@Param('id') id: string): Promise<void> {
-    return this.enrollmentService.remove(+id);
+  delete(@Param('id') id: string): Promise<void> {
+    return this.enrollmentService.delete(+id);
   }
 }

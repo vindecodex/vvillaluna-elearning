@@ -55,7 +55,7 @@ export class ContentController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  remove(@Param('id') id: string): Promise<void> {
-    return this.contentService.remove(+id);
+  delete(@Param('id') id: string): Promise<void> {
+    return this.contentService.delete(+id);
   }
 }

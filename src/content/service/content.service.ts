@@ -81,7 +81,7 @@ export class ContentService {
     }
   }
 
-  async remove(id: number): Promise<void> {
+  async delete(id: number): Promise<void> {
     const { affected } = await this.contentRepo.delete(id);
     if (affected > 0) return;
     throw new NotFoundException('Content not found.');

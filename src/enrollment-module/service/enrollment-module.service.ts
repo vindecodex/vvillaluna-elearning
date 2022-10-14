@@ -64,7 +64,7 @@ export class EnrollmentModuleService {
     return enrollmentModule;
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     const { affected } = await this.enrollmentModuleRepo.delete(id);
     if (affected > 0) return;
     throw new NotFoundException('Enrollment module not found.');

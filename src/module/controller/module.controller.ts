@@ -55,7 +55,7 @@ export class ModuleController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  remove(@Param('id') id: string): Promise<void> {
-    return this.moduleService.remove(+id);
+  delete(@Param('id') id: string): Promise<void> {
+    return this.moduleService.delete(+id);
   }
 }
