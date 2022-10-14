@@ -27,23 +27,21 @@ import { CourseService } from '../service/course.service';
 export class CourseController {
   constructor(private courseService: CourseService) {}
   @Get()
-  async findAll(
+  findAll(
     @Query() courseQueryDto: CourseQueryDto,
   ): Promise<ResponseList<Course>> {
     return this.courseService.findAll(courseQueryDto);
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Course | object> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Course | object> {
     return this.courseService.findOne(id);
   }
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('icon'))
-  async create(
+  create(
     @Body() createCourseDto: CreateCourseDto,
     @GetUser() user: User,
     @UploadedFile() file: Express.Multer.File,
@@ -55,7 +53,7 @@ export class CourseController {
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('icon'))
-  async update(
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCourseDto: UpdateCourseDto,
     @UploadedFile() file: Express.Multer.File,
@@ -66,7 +64,7 @@ export class CourseController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.courseService.delete(id);
   }
 }

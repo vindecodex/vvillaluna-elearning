@@ -25,22 +25,20 @@ export class SubjectController {
   constructor(private subjectService: SubjectService) {}
 
   @Get()
-  async findAll(
+  findAll(
     @Query() subjectQueryDto: SubjectQueryDto,
   ): Promise<ResponseList<Subject>> {
     return this.subjectService.findAll(subjectQueryDto);
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Subject | object> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Subject | object> {
     return this.subjectService.findOne(id);
   }
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  async create(
+  create(
     @Body() createSubjectDto: CreateSubjectDto,
     @GetUser() user: User,
   ): Promise<Subject> {
@@ -49,7 +47,7 @@ export class SubjectController {
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
-  async update(
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateSubjectDto: UpdateSubjectDto,
   ): Promise<Subject> {
@@ -58,7 +56,7 @@ export class SubjectController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.subjectService.delete(id);
   }
 }
