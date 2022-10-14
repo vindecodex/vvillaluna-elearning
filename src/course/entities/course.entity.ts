@@ -1,3 +1,4 @@
+import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
 import { Module } from 'src/module/entities/module.entity';
 import { Subject } from 'src/subject/entities/subject.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -42,4 +43,7 @@ export class Course {
 
   @OneToMany(() => Module, (module) => module.course)
   modules: Module[];
+
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
+  enrollments: Enrollment[];
 }

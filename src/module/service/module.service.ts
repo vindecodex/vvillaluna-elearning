@@ -31,7 +31,10 @@ export class ModuleService {
 
   async findAll(moduleQueryDto: ModuleQueryDto): Promise<ResponseList<Module>> {
     const { page = 1, limit = 5 } = moduleQueryDto;
-    const modules = await this.moduleRepo.find({ skip: page - 1, take: limit });
+    const modules = await this.moduleRepo.find({
+      skip: page ? page - 1 : page,
+      take: limit,
+    });
     const totalCount = await this.moduleRepo.countBy({ isPublished: true });
     return {
       data: modules,

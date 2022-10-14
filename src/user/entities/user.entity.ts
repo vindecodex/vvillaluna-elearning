@@ -7,12 +7,14 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Subject } from '../../subject/entities/subject.entity';
 import { Course } from 'src/course/entities/course.entity';
 import { Module } from 'src/module/entities/module.entity';
 import { Content } from 'src/content/entities/content.entity';
+import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
 
 @Entity()
 export class User {
@@ -63,4 +65,7 @@ export class User {
 
   @OneToMany(() => Content, (content) => content.author)
   contents: Content[];
+
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.user)
+  enrollments: Enrollment[];
 }

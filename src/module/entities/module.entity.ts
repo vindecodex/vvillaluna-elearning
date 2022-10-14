@@ -1,5 +1,6 @@
 import { Content } from 'src/content/entities/content.entity';
 import { Course } from 'src/course/entities/course.entity';
+import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -39,4 +40,10 @@ export class Module {
 
   @OneToMany(() => Content, (content) => content.module)
   contents: Content[];
+
+  @OneToMany(
+    () => EnrollmentModule,
+    (enrollmentModule) => enrollmentModule.module,
+  )
+  enrollmentModules: EnrollmentModule[];
 }
