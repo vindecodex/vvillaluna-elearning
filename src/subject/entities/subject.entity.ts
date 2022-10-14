@@ -18,7 +18,7 @@ export class Subject {
   @Column({ unique: true })
   title: string;
 
-  @Column()
+  @Column({ default: false })
   isPublished: boolean;
 
   @CreateDateColumn()

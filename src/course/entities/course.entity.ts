@@ -26,7 +26,7 @@ export class Course {
   @Column({ nullable: true })
   icon: string;
 
-  @Column()
+  @Column({ default: false })
   isPublished: boolean;
 
   @CreateDateColumn()

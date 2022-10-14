@@ -47,7 +47,6 @@ export class CourseService {
         description,
         subject: { id: subjectId },
         author: { id: user.id },
-        isPublished: false,
         icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
       });
       await this.courseRepo.save(course);

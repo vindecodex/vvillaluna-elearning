@@ -5,6 +5,7 @@ export class CreateCourseDto {
   title: string;
 
   @IsPositive()
+  @IsNotEmpty()
   subjectId: number;
 
   @IsOptional()

@@ -55,7 +55,6 @@ export class SubjectService {
       const { title } = createSubjectDto;
       const subject = this.subjectRepo.create({
         title,
-        isPublished: false,
         owner: user,
       });
 
@@ -73,12 +72,9 @@ export class SubjectService {
     updateSubjectDto: UpdateSubjectDto,
   ): Promise<Subject> {
     try {
-      const { title, isPublished } = updateSubjectDto;
-
       const subject = await this.subjectRepo.preload({
         id,
-        title,
-        isPublished,
+        ...updateSubjectDto,
       });
 
       if (!subject) throw new NotFoundException('Subject not found.');
