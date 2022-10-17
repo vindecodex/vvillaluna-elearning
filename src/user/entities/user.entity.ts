@@ -7,7 +7,6 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Subject } from '../../subject/entities/subject.entity';
@@ -39,11 +38,10 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: Role })
   role: Role;
 
   @Column()
-  @Exclude()
   isActive: boolean;
 
   @CreateDateColumn()
