@@ -1,17 +1,17 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional } from 'class-validator';
 import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
-import { Relations } from '../enum/relations.enum';
 import { SubjectFields } from '../enum/subject-fields.enum';
+import { SubjectRelations } from '../enum/subject-relations.enum';
 
-type TableRelations = Relations.COURSE | Relations.OWNER;
+type TableRelations = SubjectRelations.COURSE | SubjectRelations.OWNER;
 export class SubjectQueryDto extends QueryOptionsDto {
   @IsOptional()
   @IsIn(Object.values(SubjectFields))
   sort: string;
 
   @IsOptional()
-  @IsIn(Object.values(Relations))
+  @IsIn(Object.values(SubjectRelations))
   join: TableRelations[];
 
   /**
