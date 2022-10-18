@@ -12,6 +12,7 @@ import { CreateSubjectDto } from '../dto/create-subject.dto';
 import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { UpdateSubjectDto } from '../dto/update-subject.dto';
 import { Subject } from '../entities/subject.entity';
+import { buildQueryFrom } from '../helpers/build-query-from.helper';
 
 @Injectable()
 export class SubjectService {
@@ -20,16 +21,14 @@ export class SubjectService {
     private subjectRepo: Repository<Subject>,
   ) {}
 
-  async findAll(
-    subjectQueryDto: SubjectQueryDto,
-  ): Promise<ResponseList<Subject>> {
-    const { page = 1, limit = 5 } = subjectQueryDto;
-    const subjects = await this.subjectRepo.find({
-      skip: page - 1,
-      take: limit,
-      relations: { owner: true },
-    });
-    const totalCount = await this.subjectRepo.countBy({ isPublished: true });
+  async findAll(dto: SubjectQueryDto): Promise<ResponseList<Subject>> {
+    const { page = 1, limit = 25 } = dto;
+
+    const queryBuilder = this.subjectRepo.createQueryBuilder('subject');
+    buildQueryFrom(queryBuilder, dto);
+
+    queryBuilder.take(limit).skip(page - 1);
+    const [subjects, totalCount] = await queryBuilder.getManyAndCount();
 
     return {
       data: subjects,
