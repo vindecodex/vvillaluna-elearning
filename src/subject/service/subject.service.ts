@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
-import { buildQueryFrom } from '../../shared/helpers/build-query-from.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -16,6 +15,8 @@ import { Subject } from '../entities/subject.entity';
 import { joinBuilder } from '../helpers/join-builder.helper';
 import { sortBuilder } from '../helpers/sort-builder.helper';
 import { whereBuilder } from '../helpers/where-builder.helper';
+import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
+import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.helper';
 
 @Injectable()
 export class SubjectService {
@@ -32,9 +33,9 @@ export class SubjectService {
       joinBuilder,
       sortBuilder,
       whereBuilder,
+      paginateBuilder,
     );
 
-    queryBuilder.take(limit).skip(page - 1);
     const [subjects, totalCount] = await queryBuilder.getManyAndCount();
 
     return {
