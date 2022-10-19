@@ -12,6 +12,10 @@ export class SubjectQueryDto extends QueryOptionsDto {
 
   @IsOptional()
   @IsIn(Object.values(SubjectRelations), { each: true })
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    return [value];
+  })
   join: TableRelations[];
 
   /**

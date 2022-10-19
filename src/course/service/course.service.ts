@@ -4,28 +4,39 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Constants } from 'src/shared/enums/constants.enum';
-import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { Constants } from '../../shared/enums/constants.enum';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CourseQueryDto } from '../dto/course-query.dto';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { Course } from '../entities/course.entity';
+import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.helper';
+import { whereBuilder } from '../helpers/where-builder.helper';
+import { sortBuilder } from '../helpers/sort-builder.helper';
+import { joinBuilder } from '../helpers/join-builder.helper';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectRepository(Course) private courseRepo: Repository<Course>,
   ) {}
-  async findAll(courseQueryDto: CourseQueryDto): Promise<ResponseList<Course>> {
-    const { page = 1, limit = 5 } = courseQueryDto;
-    const courses = await this.courseRepo.find({
-      skip: page - 1,
-      take: limit,
-    });
-    const totalCount = await this.courseRepo.countBy({ isPublished: true });
+  async findAll(dto: CourseQueryDto): Promise<ResponseList<Course>> {
+    const { page = 1, limit = 25 } = dto;
+
+    const queryBuilder = this.courseRepo.createQueryBuilder('course');
+    buildQueryFrom<Course, CourseQueryDto>(queryBuilder, dto).apply(
+      joinBuilder,
+      sortBuilder,
+      whereBuilder,
+      paginateBuilder,
+    );
+
+    const [courses, totalCount] = await queryBuilder.getManyAndCount();
+
     return {
       data: courses,
       totalCount,
