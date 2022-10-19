@@ -25,10 +25,8 @@ export class SubjectController {
   constructor(private subjectService: SubjectService) {}
 
   @Get()
-  findAll(
-    @Query() subjectQueryDto: SubjectQueryDto,
-  ): Promise<ResponseList<Subject>> {
-    return this.subjectService.findAll(subjectQueryDto);
+  findAll(@Query() dto: SubjectQueryDto): Promise<ResponseList<Subject>> {
+    return this.subjectService.findAll(dto);
   }
 
   @Get(':id')

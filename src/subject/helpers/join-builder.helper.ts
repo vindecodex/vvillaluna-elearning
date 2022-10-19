@@ -7,12 +7,13 @@ const TableRelation = {
   owner: { field: 'subject.owner', alias: 'owner' },
 };
 
-export const joinBuilder = (
-  qb: SelectQueryBuilder<Subject>,
-  dto: SubjectQueryDto,
+export const joinBuilder = <ENTITY = Subject, DTO = SubjectQueryDto>(
+  qb: SelectQueryBuilder<ENTITY>,
+  dto: DTO,
 ) => {
-  if (typeof dto.join !== 'undefined') {
-    const joins = Array.isArray(dto.join) ? dto.join : [dto.join];
+  const { join } = dto as SubjectQueryDto;
+  if (typeof join !== 'undefined') {
+    const joins = Array.isArray(join) ? join : [join];
     joins.forEach((entity) => {
       const { field, alias } = TableRelation[entity];
       qb.leftJoinAndSelect(field, alias);

@@ -2,11 +2,11 @@ import { SelectQueryBuilder } from 'typeorm';
 import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { Subject } from '../entities/subject.entity';
 
-export const whereBuilder = (
-  qb: SelectQueryBuilder<Subject>,
-  dto: SubjectQueryDto,
+export const whereBuilder = <ENTITY = Subject, DTO = SubjectQueryDto>(
+  qb: SelectQueryBuilder<ENTITY>,
+  dto: DTO,
 ) => {
-  const { courses, published, keyword } = dto;
+  const { courses, published, keyword } = dto as SubjectQueryDto;
 
   const withCourse = courses ? 'courses.id IS NOT NULL' : 'courses.id IS NULL';
   const isPublished = `subject.isPublished = :published`;

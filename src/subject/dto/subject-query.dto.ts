@@ -11,7 +11,7 @@ export class SubjectQueryDto extends QueryOptionsDto {
   sort: string;
 
   @IsOptional()
-  @IsIn(Object.values(SubjectRelations))
+  @IsIn(Object.values(SubjectRelations), { each: true })
   join: TableRelations[];
 
   /**

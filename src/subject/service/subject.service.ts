@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from '../../shared/helpers/build-query-from.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -12,7 +13,9 @@ import { CreateSubjectDto } from '../dto/create-subject.dto';
 import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { UpdateSubjectDto } from '../dto/update-subject.dto';
 import { Subject } from '../entities/subject.entity';
-import { buildQueryFrom } from '../helpers/build-query-from.helper';
+import { joinBuilder } from '../helpers/join-builder.helper';
+import { sortBuilder } from '../helpers/sort-builder.helper';
+import { whereBuilder } from '../helpers/where-builder.helper';
 
 @Injectable()
 export class SubjectService {
@@ -25,7 +28,11 @@ export class SubjectService {
     const { page = 1, limit = 25 } = dto;
 
     const queryBuilder = this.subjectRepo.createQueryBuilder('subject');
-    buildQueryFrom(queryBuilder, dto);
+    buildQueryFrom<Subject, SubjectQueryDto>(queryBuilder, dto).apply(
+      joinBuilder,
+      sortBuilder,
+      whereBuilder,
+    );
 
     queryBuilder.take(limit).skip(page - 1);
     const [subjects, totalCount] = await queryBuilder.getManyAndCount();
