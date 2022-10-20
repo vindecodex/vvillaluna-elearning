@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
+import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -12,6 +14,9 @@ import { ContentQueryDto } from '../dto/content-query.dto';
 import { CreateContentDto } from '../dto/create-content.dto';
 import { UpdateContentDto } from '../dto/update-content.dto';
 import { Content } from '../entities/content.entity';
+import { joinBuilder } from '../helpers/join-builder.helper';
+import { sortBuilder } from '../helpers/sort-builder.helper';
+import { whereBuilder } from '../helpers/where-builder.helper';
 
 @Injectable()
 export class ContentService {
@@ -40,15 +45,19 @@ export class ContentService {
     }
   }
 
-  async findAll(
-    contentQueryDto: ContentQueryDto,
-  ): Promise<ResponseList<Content>> {
-    const { page = 1, limit = 5 } = contentQueryDto;
-    const contents = await this.contentRepo.find({
-      skip: page - 1,
-      take: limit,
-    });
-    const totalCount = await this.contentRepo.count();
+  async findAll(dto: ContentQueryDto): Promise<ResponseList<Content>> {
+    const { page = 1, limit = 5 } = dto;
+
+    const queryBuilder = this.contentRepo.createQueryBuilder('content');
+    buildQueryFrom<Content, ContentQueryDto>(queryBuilder, dto).apply(
+      joinBuilder,
+      sortBuilder,
+      whereBuilder,
+      paginateBuilder,
+    );
+
+    const [contents, totalCount] = await queryBuilder.getManyAndCount();
+
     return {
       data: contents,
       totalCount,
