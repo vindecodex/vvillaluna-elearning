@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
 import { Module } from 'src/module/entities/module.entity';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
+import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -14,6 +16,9 @@ import { CreateEnrollmentDto } from '../dto/create-enrollment.dto';
 import { EnrollmentQueryDto } from '../dto/enrollment-query.dto';
 import { UpdateEnrollmentDto } from '../dto/update-enrollment.dto';
 import { Enrollment } from '../entities/enrollment.entity';
+import { joinBuilder } from '../helpers/join-builder.helper';
+import { sortBuilder } from '../helpers/sort-builder.helper';
+import { whereBuilder } from '../helpers/where-builder.helper';
 
 @Injectable()
 export class EnrollmentService {
@@ -62,15 +67,19 @@ export class EnrollmentService {
     }
   }
 
-  async findAll(
-    enrollmentQueryDto: EnrollmentQueryDto,
-  ): Promise<ResponseList<Enrollment>> {
-    const { page = 1, limit = 5 } = enrollmentQueryDto;
-    const enrollments = await this.enrollmentRepo.find({
-      skip: page - 1,
-      take: limit,
-    });
-    const totalCount = await this.enrollmentRepo.count();
+  async findAll(dto: EnrollmentQueryDto): Promise<ResponseList<Enrollment>> {
+    const { page = 1, limit = 5 } = dto;
+
+    const queryBuilder = this.enrollmentRepo.createQueryBuilder('enrollment');
+    buildQueryFrom(queryBuilder, dto).apply(
+      joinBuilder,
+      sortBuilder,
+      whereBuilder,
+      paginateBuilder,
+    );
+
+    const [enrollments, totalCount] = await queryBuilder.getManyAndCount();
+
     return {
       data: enrollments,
       totalCount,
