@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
+import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -12,6 +14,9 @@ import { CreateModuleDto } from '../dto/create-module.dto';
 import { ModuleQueryDto } from '../dto/module-query.dto';
 import { UpdateModuleDto } from '../dto/update-module.dto';
 import { Module } from '../entities/module.entity';
+import { joinBuilder } from '../helpers/join-builder.helper';
+import { sortBuilder } from '../helpers/sort-builder.helper';
+import { whereBuilder } from '../helpers/where-builder.helper';
 
 @Injectable()
 export class ModuleService {
@@ -29,13 +34,19 @@ export class ModuleService {
     return module;
   }
 
-  async findAll(moduleQueryDto: ModuleQueryDto): Promise<ResponseList<Module>> {
-    const { page = 1, limit = 5 } = moduleQueryDto;
-    const modules = await this.moduleRepo.find({
-      skip: page ? page - 1 : page,
-      take: limit,
-    });
-    const totalCount = await this.moduleRepo.countBy({ isPublished: true });
+  async findAll(dto: ModuleQueryDto): Promise<ResponseList<Module>> {
+    const { page = 1, limit = 25 } = dto;
+
+    const queryBuilder = this.moduleRepo.createQueryBuilder('module');
+    buildQueryFrom<Module, ModuleQueryDto>(queryBuilder, dto).apply(
+      joinBuilder,
+      sortBuilder,
+      whereBuilder,
+      paginateBuilder,
+    );
+
+    const [modules, totalCount] = await queryBuilder.getManyAndCount();
+
     return {
       data: modules,
       totalCount,
