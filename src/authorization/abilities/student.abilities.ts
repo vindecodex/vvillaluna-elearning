@@ -15,13 +15,14 @@ export class StudentAbility implements RolesAbility {
   constructor(private abilityBuilder: AppAbilityBuilder, private user: User) {}
   build(): AbilityBuild {
     const { can, build } = this.abilityBuilder;
+    const { id } = this.user;
 
     /***************
      *    USER     *
      ***************/
-    can(Action.READ, User, { id: this.user.id });
-    can(Action.UPDATE, User, { id: this.user.id });
-    can(Action.DELETE, User, { id: this.user.id });
+    can(Action.READ, User, { id });
+    can(Action.UPDATE, User, { id });
+    can(Action.DELETE, User, { id });
     can(Action.READ, User, { role: Role.INSTRUCTOR });
 
     /***************
@@ -48,10 +49,10 @@ export class StudentAbility implements RolesAbility {
      * ENROLLMENT  *
      ***************/
     can(Action.READ, Enrollment, {
-      user: { role: Role.STUDENT, id: this.user.id },
+      user: { role: Role.STUDENT, id },
     });
-    can(Action.UPDATE, Enrollment, { user: { id: this.user.id } });
-    can(Action.DELETE, Enrollment, { user: { id: this.user.id } });
+    can(Action.UPDATE, Enrollment, { user: { id } });
+    can(Action.DELETE, Enrollment, { user: { id } });
 
     return build({
       detectSubjectType: (type) =>

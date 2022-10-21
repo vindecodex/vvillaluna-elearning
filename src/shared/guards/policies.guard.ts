@@ -2,12 +2,12 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Scope,
   Type,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core';
 import { CaslAbilityFactory } from '../../authorization/factories/casl-ability.factory';
 import { CHECK_POLICIES_KEY } from '../decorators/check-policies.decorator';
-import { Request } from 'express';
 import { PolicyHandler } from '../../authorization/interfaces/policy-handler.interface';
 
 @Injectable()
@@ -15,9 +15,10 @@ export class PoliciesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private caslAbilityFactory: CaslAbilityFactory,
+    private moduleRef: ModuleRef,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const policyHandlers =
       this.reflector.get<Type<PolicyHandler>[]>(
         CHECK_POLICIES_KEY,
@@ -28,16 +29,24 @@ export class PoliciesGuard implements CanActivate {
     const { user } = request;
     const ability = this.caslAbilityFactory.createForUser(user);
 
-    return policyHandlers.every((handler) => {
-      const handlerInstance = this.getHandlerInstance(handler, request);
-      return handlerInstance.handle(ability);
-    });
-  }
+    const contextId = ContextIdFactory.create();
+    this.moduleRef.registerRequestByContextId(request, contextId);
 
-  private getHandlerInstance(
-    handler: Type<PolicyHandler>,
-    request: Request,
-  ): PolicyHandler {
-    return new handler(request);
+    const handlers: PolicyHandler[] = [];
+
+    for (const handler of policyHandlers) {
+      const policyScope = this.moduleRef.introspect(handler).scope;
+      let policyHandler: PolicyHandler;
+      if (policyScope === Scope.DEFAULT) {
+        policyHandler = this.moduleRef.get(handler, { strict: false });
+      } else {
+        policyHandler = await this.moduleRef.resolve(handler, contextId, {
+          strict: false,
+        });
+      }
+      handlers.push(policyHandler);
+    }
+
+    return handlers.every((handler) => handler.handle(ability));
   }
 }
