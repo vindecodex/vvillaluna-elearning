@@ -12,6 +12,8 @@ import { UserService } from '../service/user.service';
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
+  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @CheckPolicies(ReadUserPolicyHandler)
   findAll(
     @Query() paginationQueryDto: PaginationQueryDto,
   ): Promise<ResponseList<User>> {
