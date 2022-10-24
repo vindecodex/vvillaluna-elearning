@@ -9,9 +9,9 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { User } from 'src/user/entities/user.entity';
 import { CreateEnrollmentDto } from '../dto/create-enrollment.dto';
 import { EnrollmentQueryDto } from '../dto/enrollment-query.dto';
@@ -24,7 +24,7 @@ export class EnrollmentController {
   constructor(private readonly enrollmentService: EnrollmentService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   create(
     @Body() createEnrollmentDto: CreateEnrollmentDto,
     @GetUser() user: User,
@@ -43,7 +43,7 @@ export class EnrollmentController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateEnrollmentDto: UpdateEnrollmentDto,
@@ -52,7 +52,7 @@ export class EnrollmentController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: string): Promise<void> {
     return this.enrollmentService.delete(+id);
   }

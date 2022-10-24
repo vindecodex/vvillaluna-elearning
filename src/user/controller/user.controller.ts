@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ReadUserPolicyHandler } from '../../authorization/policy-handler/user/read-user-policy.handler';
 import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
 import { PoliciesGuard } from '../../shared/guards/policies.guard';
@@ -12,7 +12,7 @@ import { UserService } from '../service/user.service';
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
-  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadUserPolicyHandler)
   findAll(
     @Query() paginationQueryDto: PaginationQueryDto,
@@ -21,7 +21,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'), PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadUserPolicyHandler)
   findOne(@Param('id') id: string): Promise<User | object> {
     return this.userService.findOne(id);

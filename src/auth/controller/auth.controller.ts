@@ -8,7 +8,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { User } from '../../user/entities/user.entity';
 import { AuthService } from '../service/auth.service';
 import { AuthenticateDto } from '../dto/authenticate.dto';
@@ -20,6 +19,7 @@ import { AuthResponse } from '../interfaces/auth-response.interface';
 import { ResponseObject } from '../../shared/interfaces/response-object.interface';
 import { LocalAuthGuard } from '../../shared/guards/local-auth.guard';
 import { RequestResetPasswordDto } from '../dto/request-reset-password.dto';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 
 @Controller()
 export class AuthController {
@@ -53,7 +53,7 @@ export class AuthController {
   }
 
   @Post('password')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   resetPassword(
     @GetUser() user: User,
@@ -63,7 +63,7 @@ export class AuthController {
   }
 
   @Get('signup/verification')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   verifyUser(@GetUser() user: User): Promise<void> {
     return this.authService.verifyUser(user);
   }
