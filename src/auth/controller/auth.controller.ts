@@ -41,6 +41,7 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
   logout(@Headers('authorization') token: string): Promise<ResponseObject> {
     return this.authService.logout(token);
   }
