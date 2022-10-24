@@ -30,34 +30,34 @@ export class InstructorAbility implements RolesAbility {
     /***************
      *   SUBJECT   *
      ***************/
-    can(Action.READ, Subject, { owner: { id } });
-    can(Action.DELETE, Subject, { owner: { id } });
-    can(Action.UPDATE, Subject, { owner: { id } });
-    can(Action.CREATE, Subject, { owner: { role: INSTRUCTOR } });
+    can(Action.READ, Subject, { 'owner.id': id });
+    can(Action.DELETE, Subject, { 'owner.id': id });
+    can(Action.UPDATE, Subject, { 'owner.id': id });
+    can(Action.CREATE, Subject, { 'owner.role': INSTRUCTOR });
 
     /***************
      *   COURSE    *
      ***************/
-    can(Action.READ, Course, { author: { id } });
-    can(Action.DELETE, Course, { author: { id } });
-    can(Action.UPDATE, Course, { author: { id } });
-    can(Action.CREATE, Course, { author: { role: INSTRUCTOR } });
+    can(Action.READ, Course, { 'author.id': id });
+    can(Action.DELETE, Course, { 'author.id': id });
+    can(Action.UPDATE, Course, { 'author.id': id });
+    can(Action.CREATE, Course, { 'author.role': INSTRUCTOR });
 
     /***************
      *   MODULE    *
      ***************/
-    can(Action.READ, Module, { author: { id } });
-    can(Action.DELETE, Module, { author: { id } });
-    can(Action.UPDATE, Module, { author: { id } });
-    can(Action.CREATE, Module, { author: { role: INSTRUCTOR } });
+    can(Action.READ, Module, { 'author.id': id });
+    can(Action.DELETE, Module, { 'author.id': id });
+    can(Action.UPDATE, Module, { 'author.id': id });
+    can(Action.CREATE, Module, { 'author.role': INSTRUCTOR });
 
     /***************
      *   CONTENT   *
      ***************/
-    can(Action.READ, Content, { author: { id } });
-    can(Action.DELETE, Content, { author: { id } });
-    can(Action.UPDATE, Content, { author: { id } });
-    can(Action.CREATE, Content, { author: { role: INSTRUCTOR } });
+    can(Action.READ, Content, { 'author.id': id });
+    can(Action.DELETE, Content, { 'author.id': id });
+    can(Action.UPDATE, Content, { 'author.id': id });
+    can(Action.CREATE, Content, { 'author.role': INSTRUCTOR });
 
     /***************
      * ENROLLMENT  *
