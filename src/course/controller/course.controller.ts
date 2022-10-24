@@ -12,9 +12,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { CourseQueryDto } from '../dto/course-query.dto';
@@ -39,7 +39,7 @@ export class CourseController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('icon'))
   create(
     @Body() createCourseDto: CreateCourseDto,
@@ -51,7 +51,7 @@ export class CourseController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('icon'))
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -63,7 +63,7 @@ export class CourseController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.courseService.delete(id);
   }

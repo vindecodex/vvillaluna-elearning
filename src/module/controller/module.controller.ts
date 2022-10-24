@@ -9,8 +9,8 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { CreateModuleDto } from '../dto/create-module.dto';
@@ -24,7 +24,7 @@ export class ModuleController {
   constructor(private readonly moduleService: ModuleService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   create(
     @Body() createModuleDto: CreateModuleDto,
     @GetUser() user: User,
@@ -45,7 +45,7 @@ export class ModuleController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateModuleDto: UpdateModuleDto,
@@ -54,7 +54,7 @@ export class ModuleController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: string): Promise<void> {
     return this.moduleService.delete(+id);
   }
