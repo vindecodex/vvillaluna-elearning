@@ -13,8 +13,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateCoursePolicyHandler } from 'src/authorization/policy-handler/course/create-course-policy.handler';
+import { DeleteCoursePolicyHandler } from 'src/authorization/policy-handler/course/delete-course-policy.handler';
+import { ReadCoursePolicyHandler } from 'src/authorization/policy-handler/course/read-course-policy.handler';
+import { UpdateCoursePolicyHandler } from 'src/authorization/policy-handler/course/update-course-policy.handler';
+import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from 'src/shared/guards/policies.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { CourseQueryDto } from '../dto/course-query.dto';
@@ -34,12 +40,15 @@ export class CourseController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(ReadCoursePolicyHandler)
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Course | object> {
     return this.courseService.findOne(id);
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(CreateCoursePolicyHandler)
   @UseInterceptors(FileInterceptor('icon'))
   create(
     @Body() createCourseDto: CreateCourseDto,
@@ -51,7 +60,8 @@ export class CourseController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(UpdateCoursePolicyHandler)
   @UseInterceptors(FileInterceptor('icon'))
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -63,7 +73,8 @@ export class CourseController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(DeleteCoursePolicyHandler)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.courseService.delete(id);
   }
