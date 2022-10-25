@@ -18,6 +18,8 @@ import { whereBuilder } from '../helpers/where-builder.helper';
 import { sortBuilder } from '../helpers/sort-builder.helper';
 import { joinBuilder } from '../helpers/join-builder.helper';
 import { Uploads } from 'src/shared/enums/uploads.enum';
+import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
+import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
 
 @Injectable()
 export class CourseService {
@@ -51,7 +53,7 @@ export class CourseService {
         relations: { author: true },
       });
 
-      if (!course) throw new NotFoundException('Course not found.');
+      if (!course) throw new NotFoundException(notFound('Course'));
 
       return course;
     } catch (e) {
@@ -73,9 +75,9 @@ export class CourseService {
       return course;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Title already exist');
+        throw new BadRequestException(alreadyExist('Course'));
       if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
-        throw new NotFoundException("Subject id doesn't exist");
+        throw new NotFoundException(notFound('Course'));
       throw e;
     }
   }
@@ -88,13 +90,13 @@ export class CourseService {
         ...dto,
         icon: `${Uploads.DESTINATION}/${icon}`,
       });
-      if (!course) throw new NotFoundException('Subject not found.');
+      if (!course) throw new NotFoundException(notFound('Course'));
 
       await this.courseRepo.save(course);
       return course;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Title already exist');
+        throw new BadRequestException(alreadyExist('Title'));
       throw e;
     }
   }
@@ -102,6 +104,6 @@ export class CourseService {
   async delete(id: number): Promise<void> {
     const { affected } = await this.courseRepo.delete(id);
     if (affected > 0) return;
-    throw new NotFoundException('Course not found.');
+    throw new NotFoundException(notFound('Course'));
   }
 }

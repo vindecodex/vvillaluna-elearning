@@ -17,6 +17,8 @@ import { sortBuilder } from '../helpers/sort-builder.helper';
 import { whereBuilder } from '../helpers/where-builder.helper';
 import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
 import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.helper';
+import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
+import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
 
 @Injectable()
 export class SubjectService {
@@ -53,7 +55,7 @@ export class SubjectService {
         relations: { owner: true },
       });
 
-      if (!subject) throw new NotFoundException('Subject not found.');
+      if (!subject) throw new NotFoundException(notFound('Subject'));
 
       return subject;
     } catch (e) {
@@ -73,7 +75,7 @@ export class SubjectService {
       return subject;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Title already exist');
+        throw new BadRequestException(alreadyExist('Title'));
       throw e;
     }
   }
@@ -85,14 +87,14 @@ export class SubjectService {
         ...dto,
       });
 
-      if (!subject) throw new NotFoundException('Subject not found.');
+      if (!subject) throw new NotFoundException(notFound('Subject'));
 
       await this.subjectRepo.save(subject);
 
       return subject;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Title already exist');
+        throw new BadRequestException(alreadyExist('Title'));
       throw e;
     }
   }
@@ -100,6 +102,6 @@ export class SubjectService {
   async delete(id: number): Promise<void> {
     const { affected } = await this.subjectRepo.delete(id);
     if (affected > 0) return;
-    throw new NotFoundException('Subject not found.');
+    throw new NotFoundException(notFound('Subject'));
   }
 }

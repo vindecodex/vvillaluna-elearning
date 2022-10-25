@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { Repository } from 'typeorm';
 import { CreateEnrollmentModuleDto } from '../dto/create-enrollment-module.dto';
@@ -50,7 +51,7 @@ export class EnrollmentModuleService {
       });
 
       if (!enrollmentModule)
-        throw new NotFoundException('Enrollment module not found.');
+        throw new NotFoundException(notFound('Enrollment module'));
 
       return enrollmentModule;
     } catch (e) {
@@ -67,7 +68,7 @@ export class EnrollmentModuleService {
       ...updateEnrollmentModuleDto,
     });
     if (!enrollmentModule)
-      throw new NotFoundException('Enrollment module not found.');
+      throw new NotFoundException(notFound('Enrollment module'));
     await this.enrollmentModuleRepo.save(enrollmentModule);
     return enrollmentModule;
   }
@@ -75,6 +76,6 @@ export class EnrollmentModuleService {
   async delete(id: number) {
     const { affected } = await this.enrollmentModuleRepo.delete(id);
     if (affected > 0) return;
-    throw new NotFoundException('Enrollment module not found.');
+    throw new NotFoundException(notFound('Enrollment module'));
   }
 }
