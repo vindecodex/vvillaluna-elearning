@@ -5,6 +5,7 @@ import { User } from 'src/user/entities/user.entity';
 
 export class UpdateUserPolicyHandler implements PolicyHandler {
   constructor(private user: User) {}
+
   handle(ability: AppAbility) {
     return ability.can(Action.UPDATE, this.user);
   }

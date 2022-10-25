@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Constants } from '../../shared/enums/constants.enum';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
 import { ResponseList } from '../../shared/interfaces/response-list.interface';
@@ -18,6 +17,7 @@ import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.
 import { whereBuilder } from '../helpers/where-builder.helper';
 import { sortBuilder } from '../helpers/sort-builder.helper';
 import { joinBuilder } from '../helpers/join-builder.helper';
+import { Uploads } from 'src/shared/enums/uploads.enum';
 
 @Injectable()
 export class CourseService {
@@ -25,8 +25,7 @@ export class CourseService {
     @InjectRepository(Course) private courseRepo: Repository<Course>,
   ) {}
   async findAll(dto: CourseQueryDto): Promise<ResponseList<Course>> {
-    const { page = 1, limit = 25 } = dto;
-
+    const { page, limit } = dto;
     const queryBuilder = this.courseRepo.createQueryBuilder('course');
     buildQueryFrom<Course, CourseQueryDto>(queryBuilder, dto).apply(
       joinBuilder,
@@ -46,19 +45,22 @@ export class CourseService {
   }
 
   async findOne(id: number): Promise<Course | object> {
-    const course = await this.courseRepo.findOne({ where: { id } });
+    const course = await this.courseRepo.findOne({
+      where: { id },
+      relations: { author: true },
+    });
     return course ? course : {};
   }
 
-  async create(createCourseDto: CreateCourseDto, user: User): Promise<Course> {
+  async create(dto: CreateCourseDto, user: User): Promise<Course> {
     try {
-      const { title, subjectId, description, icon } = createCourseDto;
+      const { title, subjectId, description, icon } = dto;
       const course = this.courseRepo.create({
         title,
         description,
         subject: { id: subjectId },
         author: { id: user.id },
-        icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
+        icon: `${Uploads.DESTINATION}/${icon}`,
       });
       await this.courseRepo.save(course);
       return course;
@@ -66,18 +68,18 @@ export class CourseService {
       if (e.code === PostgresErrorCode.DUPLICATE)
         throw new BadRequestException('Title already exist');
       if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
-        throw new BadRequestException("Subject id doesn't exist");
+        throw new NotFoundException("Subject id doesn't exist");
       throw e;
     }
   }
 
-  async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
+  async update(id: number, dto: UpdateCourseDto): Promise<Course> {
     try {
-      const { icon } = updateCourseDto;
+      const { icon } = dto;
       const course = await this.courseRepo.preload({
         id,
-        ...updateCourseDto,
-        icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
+        ...dto,
+        icon: `${Uploads.DESTINATION}/${icon}`,
       });
       if (!course) throw new NotFoundException('Subject not found.');
 

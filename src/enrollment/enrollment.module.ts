@@ -5,6 +5,7 @@ import { Enrollment } from './entities/enrollment.entity';
 import { EnrollmentModule as EnrollmentModuleEntity } from '../enrollment-module/entities/enrollment-module.entity';
 import { Module as ModuleEntity } from '../module/entities/module.entity';
 import { EnrollmentService } from './service/enrollment.service';
+import { CaslAbilityFactory } from 'src/authorization/factories/casl-ability.factory';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { EnrollmentService } from './service/enrollment.service';
     ]),
   ],
   controllers: [EnrollmentController],
-  providers: [EnrollmentService],
+  providers: [EnrollmentService, CaslAbilityFactory],
+  exports: [EnrollmentService],
 })
 export class EnrollmentModule {}

@@ -29,7 +29,7 @@ export class EnrollmentModuleService {
   async findAll(
     queryOptionsDto: QueryOptionsDto,
   ): Promise<ResponseList<EnrollmentModule>> {
-    const { page = 1, limit = 5 } = queryOptionsDto;
+    const { page, limit } = queryOptionsDto;
     const enrollmentModules = await this.enrollmentModuleRepo.find({
       skip: page - 1,
       take: limit,

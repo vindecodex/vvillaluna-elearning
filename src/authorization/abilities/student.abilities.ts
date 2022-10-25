@@ -49,10 +49,11 @@ export class StudentAbility implements RolesAbility {
      * ENROLLMENT  *
      ***************/
     can(Action.READ, Enrollment, {
-      user: { role: Role.STUDENT, id },
+      'user.role': Role.STUDENT,
+      'user.id': id,
     });
-    can(Action.UPDATE, Enrollment, { user: { id } });
-    can(Action.DELETE, Enrollment, { user: { id } });
+    can(Action.UPDATE, Enrollment, { 'user.id': id });
+    can(Action.DELETE, Enrollment, { 'user.id': id });
 
     return build({
       detectSubjectType: (type) =>

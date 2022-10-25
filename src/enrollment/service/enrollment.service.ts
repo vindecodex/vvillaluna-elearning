@@ -29,12 +29,9 @@ export class EnrollmentService {
     private enrollmentModuleRepo: Repository<EnrollmentModule>,
     @InjectRepository(Module) private moduleRepo: Repository<Module>,
   ) {}
-  async create(
-    createEnrollmentDto: CreateEnrollmentDto,
-    user: User,
-  ): Promise<Enrollment> {
+  async create(dto: CreateEnrollmentDto, user: User): Promise<Enrollment> {
     try {
-      const { courseId } = createEnrollmentDto;
+      const { courseId } = dto;
       const enrollment = this.enrollmentRepo.create({
         user: { id: user.id },
         course: { id: courseId },
@@ -68,7 +65,7 @@ export class EnrollmentService {
   }
 
   async findAll(dto: EnrollmentQueryDto): Promise<ResponseList<Enrollment>> {
-    const { page = 1, limit = 5 } = dto;
+    const { page, limit } = dto;
 
     const queryBuilder = this.enrollmentRepo.createQueryBuilder('enrollment');
     buildQueryFrom(queryBuilder, dto).apply(
@@ -89,15 +86,18 @@ export class EnrollmentService {
   }
 
   async findOne(id: number): Promise<Enrollment | object> {
-    const enrollment = await this.enrollmentRepo.findOne({ where: { id } });
+    const enrollment = await this.enrollmentRepo.findOne({
+      where: { id },
+      relations: { user: true },
+    });
     return enrollment ? enrollment : {};
   }
 
   async update(
     id: number,
-    updateEnrollmentDto: UpdateEnrollmentDto,
+    dto: UpdateEnrollmentDto,
   ): Promise<EnrollmentModule> {
-    const { moduleId, isCompleted } = updateEnrollmentDto;
+    const { moduleId, isCompleted } = dto;
     const moduleEnrollment = await this.enrollmentModuleRepo.findOneBy({
       enrollment: { id },
       module: { id: moduleId },

@@ -9,8 +9,14 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
+import { CreateContentPolicyHandler } from 'src/authorization/policy-handler/content/create-content-policy.handler';
+import { DeleteContentPolicyHandler } from 'src/authorization/policy-handler/content/delete-content-policy.handler';
+import { ReadContentPolicyHandler } from 'src/authorization/policy-handler/content/read-content-policy.handler';
+import { UpdateContentPolicyHandler } from 'src/authorization/policy-handler/content/update-content-policy.handler';
+import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from 'src/shared/guards/policies.guard';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { ContentQueryDto } from '../dto/content-query.dto';
@@ -24,37 +30,40 @@ export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(CreateContentPolicyHandler)
   create(
-    @Body() createContentDto: CreateContentDto,
+    @Body() dto: CreateContentDto,
     @GetUser() user: User,
   ): Promise<Content> {
-    return this.contentService.create(createContentDto, user);
+    return this.contentService.create(dto, user);
   }
 
   @Get()
-  findAll(
-    @Query() contentQueryDto: ContentQueryDto,
-  ): Promise<ResponseList<Content>> {
-    return this.contentService.findAll(contentQueryDto);
+  findAll(@Query() dto: ContentQueryDto): Promise<ResponseList<Content>> {
+    return this.contentService.findAll(dto);
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(ReadContentPolicyHandler)
   findOne(@Param('id') id: string) {
     return this.contentService.findOne(+id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(UpdateContentPolicyHandler)
   update(
     @Param('id') id: string,
-    @Body() updateContentDto: UpdateContentDto,
+    @Body() dto: UpdateContentDto,
   ): Promise<Content> {
-    return this.contentService.update(+id, updateContentDto);
+    return this.contentService.update(+id, dto);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
+  @CheckPolicies(DeleteContentPolicyHandler)
   delete(@Param('id') id: string): Promise<void> {
     return this.contentService.delete(+id);
   }

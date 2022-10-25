@@ -23,10 +23,10 @@ export class ModuleService {
   constructor(
     @InjectRepository(Module) private moduleRepo: Repository<Module>,
   ) {}
-  async create(createModuleDto: CreateModuleDto, user: User): Promise<Module> {
-    const { courseId } = createModuleDto;
+  async create(dto: CreateModuleDto, user: User): Promise<Module> {
+    const { courseId } = dto;
     const module = this.moduleRepo.create({
-      ...createModuleDto,
+      ...dto,
       author: { id: user.id },
       course: { id: courseId },
     });
@@ -35,7 +35,7 @@ export class ModuleService {
   }
 
   async findAll(dto: ModuleQueryDto): Promise<ResponseList<Module>> {
-    const { page = 1, limit = 25 } = dto;
+    const { page, limit } = dto;
 
     const queryBuilder = this.moduleRepo.createQueryBuilder('module');
     buildQueryFrom<Module, ModuleQueryDto>(queryBuilder, dto).apply(
@@ -56,15 +56,18 @@ export class ModuleService {
   }
 
   async findOne(id: number): Promise<Module | object> {
-    const module = await this.moduleRepo.findOne({ where: { id } });
+    const module = await this.moduleRepo.findOne({
+      where: { id },
+      relations: { author: true },
+    });
     return module ? module : {};
   }
 
-  async update(id: number, updateModuleDto: UpdateModuleDto): Promise<Module> {
+  async update(id: number, dto: UpdateModuleDto): Promise<Module> {
     try {
       const module = await this.moduleRepo.preload({
         id,
-        ...updateModuleDto,
+        ...dto,
       });
       if (!module) throw new NotFoundException('Module not found.');
       await this.moduleRepo.save(module);
