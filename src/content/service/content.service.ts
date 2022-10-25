@@ -43,8 +43,7 @@ export class ContentService {
   }
 
   async findAll(dto: ContentQueryDto): Promise<ResponseList<Content>> {
-    const { page = 1, limit = 5 } = dto;
-
+    const { page, limit } = dto;
     const queryBuilder = this.contentRepo.createQueryBuilder('content');
     buildQueryFrom<Content, ContentQueryDto>(queryBuilder, dto).apply(
       joinBuilder,

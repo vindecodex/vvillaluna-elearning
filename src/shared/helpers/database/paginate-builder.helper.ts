@@ -5,7 +5,7 @@ export const paginateBuilder = <ENTITY, DTO = QueryOptionsDto>(
   qb: SelectQueryBuilder<ENTITY>,
   dto: DTO,
 ) => {
-  const { page = 1, limit = 25 } = dto as QueryOptionsDto;
+  const { page, limit } = dto as QueryOptionsDto;
   const offset = limit * (page - 1);
   qb.take(limit).skip(offset);
 };

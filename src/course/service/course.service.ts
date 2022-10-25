@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Constants } from '../../shared/enums/constants.enum';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
 import { ResponseList } from '../../shared/interfaces/response-list.interface';
@@ -18,6 +17,7 @@ import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.
 import { whereBuilder } from '../helpers/where-builder.helper';
 import { sortBuilder } from '../helpers/sort-builder.helper';
 import { joinBuilder } from '../helpers/join-builder.helper';
+import { Uploads } from 'src/shared/enums/uploads.enum';
 
 @Injectable()
 export class CourseService {
@@ -25,8 +25,7 @@ export class CourseService {
     @InjectRepository(Course) private courseRepo: Repository<Course>,
   ) {}
   async findAll(dto: CourseQueryDto): Promise<ResponseList<Course>> {
-    const { page = 1, limit = 25 } = dto;
-
+    const { page, limit } = dto;
     const queryBuilder = this.courseRepo.createQueryBuilder('course');
     buildQueryFrom<Course, CourseQueryDto>(queryBuilder, dto).apply(
       joinBuilder,
@@ -61,7 +60,7 @@ export class CourseService {
         description,
         subject: { id: subjectId },
         author: { id: user.id },
-        icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
+        icon: `${Uploads.DESTINATION}/${icon}`,
       });
       await this.courseRepo.save(course);
       return course;
@@ -80,7 +79,7 @@ export class CourseService {
       const course = await this.courseRepo.preload({
         id,
         ...dto,
-        icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
+        icon: `${Uploads.DESTINATION}/${icon}`,
       });
       if (!course) throw new NotFoundException('Subject not found.');
 

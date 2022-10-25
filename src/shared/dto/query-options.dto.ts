@@ -1,15 +1,16 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive } from 'class-validator';
+import { Pagination } from '../enums/pagination.enum';
 import { SortDirection } from '../enums/sort-direction.enum';
 
 export class QueryOptionsDto {
   @IsOptional()
   @IsPositive()
-  page: number;
+  page: number = Pagination.DEFAULT_PAGE;
 
   @IsOptional()
   @IsPositive()
-  limit: number;
+  limit: number = Pagination.DEFAULT_LIMIT;
 
   @IsOptional()
   @IsIn(['ASC', 'DESC'])

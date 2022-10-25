@@ -65,7 +65,7 @@ export class EnrollmentService {
   }
 
   async findAll(dto: EnrollmentQueryDto): Promise<ResponseList<Enrollment>> {
-    const { page = 1, limit = 5 } = dto;
+    const { page, limit } = dto;
 
     const queryBuilder = this.enrollmentRepo.createQueryBuilder('enrollment');
     buildQueryFrom(queryBuilder, dto).apply(

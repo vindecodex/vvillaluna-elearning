@@ -35,7 +35,7 @@ export class ModuleService {
   }
 
   async findAll(dto: ModuleQueryDto): Promise<ResponseList<Module>> {
-    const { page = 1, limit = 25 } = dto;
+    const { page, limit } = dto;
 
     const queryBuilder = this.moduleRepo.createQueryBuilder('module');
     buildQueryFrom<Module, ModuleQueryDto>(queryBuilder, dto).apply(

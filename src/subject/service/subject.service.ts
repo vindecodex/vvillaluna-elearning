@@ -26,7 +26,7 @@ export class SubjectService {
   ) {}
 
   async findAll(dto: SubjectQueryDto): Promise<ResponseList<Subject>> {
-    const { page = 1, limit = 25 } = dto;
+    const { page, limit } = dto;
 
     const queryBuilder = this.subjectRepo.createQueryBuilder('subject');
     buildQueryFrom<Subject, SubjectQueryDto>(queryBuilder, dto).apply(
