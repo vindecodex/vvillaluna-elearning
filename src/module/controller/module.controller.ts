@@ -32,18 +32,13 @@ export class ModuleController {
   @Post()
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(CreateModulePolicyHandler)
-  create(
-    @Body() createModuleDto: CreateModuleDto,
-    @GetUser() user: User,
-  ): Promise<Module> {
-    return this.moduleService.create(createModuleDto, user);
+  create(@Body() dto: CreateModuleDto, @GetUser() user: User): Promise<Module> {
+    return this.moduleService.create(dto, user);
   }
 
   @Get()
-  findAll(
-    @Query() moduleQueryDto: ModuleQueryDto,
-  ): Promise<ResponseList<Module>> {
-    return this.moduleService.findAll(moduleQueryDto);
+  findAll(@Query() dto: ModuleQueryDto): Promise<ResponseList<Module>> {
+    return this.moduleService.findAll(dto);
   }
 
   @Get(':id')
@@ -58,9 +53,9 @@ export class ModuleController {
   @CheckPolicies(UpdateModulePolicyHandler)
   update(
     @Param('id') id: string,
-    @Body() updateModuleDto: UpdateModuleDto,
+    @Body() dto: UpdateModuleDto,
   ): Promise<Module> {
-    return this.moduleService.update(+id, updateModuleDto);
+    return this.moduleService.update(+id, dto);
   }
 
   @Delete(':id')

@@ -54,12 +54,9 @@ export class SubjectService {
     return subject ? subject : {};
   }
 
-  async create(
-    createSubjectDto: CreateSubjectDto,
-    user: User,
-  ): Promise<Subject> {
+  async create(dto: CreateSubjectDto, user: User): Promise<Subject> {
     try {
-      const { title } = createSubjectDto;
+      const { title } = dto;
       const subject = this.subjectRepo.create({
         title,
         owner: user,
@@ -74,14 +71,11 @@ export class SubjectService {
     }
   }
 
-  async update(
-    id: number,
-    updateSubjectDto: UpdateSubjectDto,
-  ): Promise<Subject> {
+  async update(id: number, dto: UpdateSubjectDto): Promise<Subject> {
     try {
       const subject = await this.subjectRepo.preload({
         id,
-        ...updateSubjectDto,
+        ...dto,
       });
 
       if (!subject) throw new NotFoundException('Subject not found.');

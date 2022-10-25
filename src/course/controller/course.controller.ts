@@ -33,10 +33,8 @@ import { CourseService } from '../service/course.service';
 export class CourseController {
   constructor(private courseService: CourseService) {}
   @Get()
-  findAll(
-    @Query() courseQueryDto: CourseQueryDto,
-  ): Promise<ResponseList<Course>> {
-    return this.courseService.findAll(courseQueryDto);
+  findAll(@Query() dto: CourseQueryDto): Promise<ResponseList<Course>> {
+    return this.courseService.findAll(dto);
   }
 
   @Get(':id')
@@ -51,12 +49,12 @@ export class CourseController {
   @CheckPolicies(CreateCoursePolicyHandler)
   @UseInterceptors(FileInterceptor('icon'))
   create(
-    @Body() createCourseDto: CreateCourseDto,
+    @Body() dto: CreateCourseDto,
     @GetUser() user: User,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Course> {
-    createCourseDto.icon = file.filename;
-    return this.courseService.create(createCourseDto, user);
+    dto.icon = file.filename;
+    return this.courseService.create(dto, user);
   }
 
   @Patch(':id')
@@ -65,11 +63,11 @@ export class CourseController {
   @UseInterceptors(FileInterceptor('icon'))
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateCourseDto: UpdateCourseDto,
+    @Body() dto: UpdateCourseDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Course> {
-    updateCourseDto.icon = file.filename;
-    return this.courseService.update(id, updateCourseDto);
+    dto.icon = file.filename;
+    return this.courseService.update(id, dto);
   }
 
   @Delete(':id')

@@ -14,10 +14,8 @@ import { User } from '../entities/user.entity';
 export class UserService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
-  async findAll(
-    paginationQuerDto: PaginationQueryDto,
-  ): Promise<ResponseList<User>> {
-    const { page = 1, limit = 5 } = paginationQuerDto;
+  async findAll(dto: PaginationQueryDto): Promise<ResponseList<User>> {
+    const { page = 1, limit = 5 } = dto;
     const users = await this.userRepo.find({ skip: page - 1, take: limit });
     const totalCount = await this.userRepo.countBy({ isActive: true });
     return {

@@ -23,10 +23,10 @@ export class ModuleService {
   constructor(
     @InjectRepository(Module) private moduleRepo: Repository<Module>,
   ) {}
-  async create(createModuleDto: CreateModuleDto, user: User): Promise<Module> {
-    const { courseId } = createModuleDto;
+  async create(dto: CreateModuleDto, user: User): Promise<Module> {
+    const { courseId } = dto;
     const module = this.moduleRepo.create({
-      ...createModuleDto,
+      ...dto,
       author: { id: user.id },
       course: { id: courseId },
     });
@@ -63,11 +63,11 @@ export class ModuleService {
     return module ? module : {};
   }
 
-  async update(id: number, updateModuleDto: UpdateModuleDto): Promise<Module> {
+  async update(id: number, dto: UpdateModuleDto): Promise<Module> {
     try {
       const module = await this.moduleRepo.preload({
         id,
-        ...updateModuleDto,
+        ...dto,
       });
       if (!module) throw new NotFoundException('Module not found.');
       await this.moduleRepo.save(module);

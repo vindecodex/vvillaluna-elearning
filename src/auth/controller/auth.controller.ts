@@ -26,17 +26,15 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  createUser(@Body() userCredentialsDto: UserCredentialsDto): Promise<User> {
-    return this.authService.createUser(userCredentialsDto);
+  createUser(@Body() dto: UserCredentialsDto): Promise<User> {
+    return this.authService.createUser(dto);
   }
 
   @Post('login')
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
-  authenticate(
-    @Body() authenticateDto: AuthenticateDto,
-  ): Promise<AuthResponse> {
-    return this.authService.authenticate(authenticateDto);
+  authenticate(@Body() dto: AuthenticateDto): Promise<AuthResponse> {
+    return this.authService.authenticate(dto);
   }
 
   @Post('logout')
@@ -58,9 +56,9 @@ export class AuthController {
   @HttpCode(200)
   resetPassword(
     @GetUser() user: User,
-    @Body() resetPasswordDto: ResetPasswordDto,
+    @Body() dto: ResetPasswordDto,
   ): Promise<ResponseObject> {
-    return this.authService.resetPassword(user, resetPasswordDto);
+    return this.authService.resetPassword(user, dto);
   }
 
   @Get('signup/verification')
@@ -71,9 +69,7 @@ export class AuthController {
 
   @Post('signup/verification')
   @HttpCode(200)
-  resendVerification(
-    @Body() resendVerificationDto: ResendVerificationDto,
-  ): Promise<void> {
-    return this.authService.resendVerificationEmail(resendVerificationDto);
+  resendVerification(@Body() dto: ResendVerificationDto): Promise<void> {
+    return this.authService.resendVerificationEmail(dto);
   }
 }

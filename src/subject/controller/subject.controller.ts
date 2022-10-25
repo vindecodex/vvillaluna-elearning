@@ -47,10 +47,10 @@ export class SubjectController {
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(CreateSubjectPolicyHandler)
   create(
-    @Body() createSubjectDto: CreateSubjectDto,
+    @Body() dto: CreateSubjectDto,
     @GetUser() user: User,
   ): Promise<Subject> {
-    return this.subjectService.create(createSubjectDto, user);
+    return this.subjectService.create(dto, user);
   }
 
   @Patch(':id')
@@ -58,9 +58,9 @@ export class SubjectController {
   @CheckPolicies(UpdateSubjectPolicyHandler)
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateSubjectDto: UpdateSubjectDto,
+    @Body() dto: UpdateSubjectDto,
   ): Promise<Subject> {
-    return this.subjectService.update(id, updateSubjectDto);
+    return this.subjectService.update(id, dto);
   }
 
   @Delete(':id')

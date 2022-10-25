@@ -33,17 +33,15 @@ export class ContentController {
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(CreateContentPolicyHandler)
   create(
-    @Body() createContentDto: CreateContentDto,
+    @Body() dto: CreateContentDto,
     @GetUser() user: User,
   ): Promise<Content> {
-    return this.contentService.create(createContentDto, user);
+    return this.contentService.create(dto, user);
   }
 
   @Get()
-  findAll(
-    @Query() contentQueryDto: ContentQueryDto,
-  ): Promise<ResponseList<Content>> {
-    return this.contentService.findAll(contentQueryDto);
+  findAll(@Query() dto: ContentQueryDto): Promise<ResponseList<Content>> {
+    return this.contentService.findAll(dto);
   }
 
   @Get(':id')
@@ -58,9 +56,9 @@ export class ContentController {
   @CheckPolicies(UpdateContentPolicyHandler)
   update(
     @Param('id') id: string,
-    @Body() updateContentDto: UpdateContentDto,
+    @Body() dto: UpdateContentDto,
   ): Promise<Content> {
-    return this.contentService.update(+id, updateContentDto);
+    return this.contentService.update(+id, dto);
   }
 
   @Delete(':id')

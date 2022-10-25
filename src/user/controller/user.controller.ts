@@ -14,10 +14,8 @@ export class UserController {
   @Get()
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadUserPolicyHandler)
-  findAll(
-    @Query() paginationQueryDto: PaginationQueryDto,
-  ): Promise<ResponseList<User>> {
-    return this.userService.findAll(paginationQueryDto);
+  findAll(@Query() dto: PaginationQueryDto): Promise<ResponseList<User>> {
+    return this.userService.findAll(dto);
   }
 
   @Get(':id')

@@ -53,9 +53,9 @@ export class CourseService {
     return course ? course : {};
   }
 
-  async create(createCourseDto: CreateCourseDto, user: User): Promise<Course> {
+  async create(dto: CreateCourseDto, user: User): Promise<Course> {
     try {
-      const { title, subjectId, description, icon } = createCourseDto;
+      const { title, subjectId, description, icon } = dto;
       const course = this.courseRepo.create({
         title,
         description,
@@ -74,12 +74,12 @@ export class CourseService {
     }
   }
 
-  async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
+  async update(id: number, dto: UpdateCourseDto): Promise<Course> {
     try {
-      const { icon } = updateCourseDto;
+      const { icon } = dto;
       const course = await this.courseRepo.preload({
         id,
-        ...updateCourseDto,
+        ...dto,
         icon: `${Constants.UPLOAD_DESTINATION}/${icon}`,
       });
       if (!course) throw new NotFoundException('Subject not found.');

@@ -33,15 +33,15 @@ export class EnrollmentController {
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(CreateEnrollmentPolicyHandler)
   create(
-    @Body() createEnrollmentDto: CreateEnrollmentDto,
+    @Body() dto: CreateEnrollmentDto,
     @GetUser() user: User,
   ): Promise<Enrollment> {
-    return this.enrollmentService.create(createEnrollmentDto, user);
+    return this.enrollmentService.create(dto, user);
   }
 
   @Get()
-  findAll(@Query() enrollmentQueryDto: EnrollmentQueryDto) {
-    return this.enrollmentService.findAll(enrollmentQueryDto);
+  findAll(@Query() dto: EnrollmentQueryDto) {
+    return this.enrollmentService.findAll(dto);
   }
 
   @Get(':id')
@@ -56,9 +56,9 @@ export class EnrollmentController {
   @CheckPolicies(UpdateEnrollmentPolicyHandler)
   update(
     @Param('id') id: string,
-    @Body() updateEnrollmentDto: UpdateEnrollmentDto,
+    @Body() dto: UpdateEnrollmentDto,
   ): Promise<EnrollmentModule> {
-    return this.enrollmentService.update(+id, updateEnrollmentDto);
+    return this.enrollmentService.update(+id, dto);
   }
 
   @Delete(':id')

@@ -31,14 +31,14 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {}
 
-  async createUser(userCredentialsDto: UserCredentialsDto): Promise<User> {
-    const { password } = userCredentialsDto;
+  async createUser(dto: UserCredentialsDto): Promise<User> {
+    const { password } = dto;
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     try {
       const user = this.userRepo.create({
-        ...userCredentialsDto,
+        ...dto,
         password: hashedPassword,
         salt,
         isActive: false,
@@ -58,8 +58,8 @@ export class AuthService {
     }
   }
 
-  async authenticate(authenticateDto: AuthenticateDto): Promise<AuthResponse> {
-    const { email, password } = authenticateDto;
+  async authenticate(dto: AuthenticateDto): Promise<AuthResponse> {
+    const { email, password } = dto;
     const user = await this.userRepo.findOne({
       where: { email },
     });
@@ -103,11 +103,8 @@ export class AuthService {
     };
   }
 
-  async resetPassword(
-    u: User,
-    resetPasswordDto: ResetPasswordDto,
-  ): Promise<ResponseObject> {
-    const { password } = resetPasswordDto;
+  async resetPassword(u: User, dto: ResetPasswordDto): Promise<ResponseObject> {
+    const { password } = dto;
 
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -161,11 +158,9 @@ export class AuthService {
     }
   }
 
-  async resendVerificationEmail(
-    resendVerificationDto: ResendVerificationDto,
-  ): Promise<void> {
+  async resendVerificationEmail(dto: ResendVerificationDto): Promise<void> {
     try {
-      const { email } = resendVerificationDto;
+      const { email } = dto;
       const user = await this.userRepo.findOneBy({ email });
       if (!user) {
         await this.mailService.sendAccountNotFound(email);

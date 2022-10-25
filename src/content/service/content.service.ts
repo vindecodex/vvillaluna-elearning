@@ -23,14 +23,11 @@ export class ContentService {
   constructor(
     @InjectRepository(Content) private contentRepo: Repository<Content>,
   ) {}
-  async create(
-    createContentDto: CreateContentDto,
-    user: User,
-  ): Promise<Content> {
+  async create(dto: CreateContentDto, user: User): Promise<Content> {
     try {
-      const { moduleId } = createContentDto;
+      const { moduleId } = dto;
       const content = this.contentRepo.create({
-        ...createContentDto,
+        ...dto,
         module: { id: moduleId },
         author: { id: user.id },
       });
@@ -74,14 +71,11 @@ export class ContentService {
     return content ? content : {};
   }
 
-  async update(
-    id: number,
-    updateContentDto: UpdateContentDto,
-  ): Promise<Content> {
+  async update(id: number, dto: UpdateContentDto): Promise<Content> {
     try {
       const content = await this.contentRepo.preload({
         id,
-        ...updateContentDto,
+        ...dto,
       });
       if (!content) throw new NotFoundException('Content not found.');
       await this.contentRepo.save(content);
