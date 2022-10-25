@@ -39,7 +39,7 @@ export class SubjectController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadSubjectPolicyHandler)
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Subject | object> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Subject> {
     return this.subjectService.findOne(id);
   }
 

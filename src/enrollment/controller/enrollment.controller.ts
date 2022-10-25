@@ -18,6 +18,7 @@ import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { PoliciesGuard } from 'src/shared/guards/policies.guard';
+import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { CreateEnrollmentDto } from '../dto/create-enrollment.dto';
 import { EnrollmentQueryDto } from '../dto/enrollment-query.dto';
@@ -40,14 +41,14 @@ export class EnrollmentController {
   }
 
   @Get()
-  findAll(@Query() dto: EnrollmentQueryDto) {
+  findAll(@Query() dto: EnrollmentQueryDto): Promise<ResponseList<Enrollment>> {
     return this.enrollmentService.findAll(dto);
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadEnrollmentPolicyHandler)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Enrollment> {
     return this.enrollmentService.findOne(+id);
   }
 

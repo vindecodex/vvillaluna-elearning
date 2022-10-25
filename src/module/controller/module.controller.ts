@@ -44,7 +44,7 @@ export class ModuleController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadModulePolicyHandler)
-  findOne(@Param('id') id: string): Promise<Module | object> {
+  findOne(@Param('id') id: string): Promise<Module> {
     return this.moduleService.findOne(+id);
   }
 
