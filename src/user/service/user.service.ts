@@ -26,10 +26,13 @@ export class UserService {
     };
   }
 
-  async findOne(id: string): Promise<User | object> {
+  async findOne(id: string): Promise<User> {
     try {
       const user = await this.userRepo.findOne({ where: { id } });
-      return user ? user : {};
+
+      if (!user) throw new BadRequestException('Error getting user');
+
+      return user;
     } catch (e) {
       if (e.code === PostgresErrorCode.INVALID_INPUT) {
         throw new BadRequestException('Invalid ID format provided');

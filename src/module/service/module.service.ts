@@ -55,12 +55,19 @@ export class ModuleService {
     };
   }
 
-  async findOne(id: number): Promise<Module | object> {
-    const module = await this.moduleRepo.findOne({
-      where: { id },
-      relations: { author: true },
-    });
-    return module ? module : {};
+  async findOne(id: number): Promise<Module> {
+    try {
+      const module = await this.moduleRepo.findOne({
+        where: { id },
+        relations: { author: true },
+      });
+
+      if (!module) throw new NotFoundException('Module not found.');
+
+      return module;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(id: number, dto: UpdateModuleDto): Promise<Module> {

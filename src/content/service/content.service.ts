@@ -62,12 +62,19 @@ export class ContentService {
     };
   }
 
-  async findOne(id: number): Promise<Content | object> {
-    const content = await this.contentRepo.findOne({
-      where: { id },
-      relations: { author: true },
-    });
-    return content ? content : {};
+  async findOne(id: number): Promise<Content> {
+    try {
+      const content = await this.contentRepo.findOne({
+        where: { id },
+        relations: { author: true },
+      });
+
+      if (!content) throw new NotFoundException('Content not found.');
+
+      return content;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(id: number, dto: UpdateContentDto): Promise<Content> {

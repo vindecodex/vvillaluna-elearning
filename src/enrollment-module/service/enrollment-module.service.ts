@@ -43,11 +43,19 @@ export class EnrollmentModuleService {
     };
   }
 
-  async findOne(id: number): Promise<EnrollmentModule | object> {
-    const enrollmentModule = await this.enrollmentModuleRepo.findOne({
-      where: { id },
-    });
-    return enrollmentModule ? enrollmentModule : {};
+  async findOne(id: number): Promise<EnrollmentModule> {
+    try {
+      const enrollmentModule = await this.enrollmentModuleRepo.findOne({
+        where: { id },
+      });
+
+      if (!enrollmentModule)
+        throw new NotFoundException('Enrollment module not found.');
+
+      return enrollmentModule;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(

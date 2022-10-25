@@ -46,12 +46,19 @@ export class SubjectService {
     };
   }
 
-  async findOne(id: number): Promise<Subject | object> {
-    const subject = await this.subjectRepo.findOne({
-      where: { id },
-      relations: { owner: true },
-    });
-    return subject ? subject : {};
+  async findOne(id: number): Promise<Subject> {
+    try {
+      const subject = await this.subjectRepo.findOne({
+        where: { id },
+        relations: { owner: true },
+      });
+
+      if (!subject) throw new NotFoundException('Subject not found.');
+
+      return subject;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async create(dto: CreateSubjectDto, user: User): Promise<Subject> {

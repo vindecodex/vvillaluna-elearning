@@ -44,12 +44,19 @@ export class CourseService {
     };
   }
 
-  async findOne(id: number): Promise<Course | object> {
-    const course = await this.courseRepo.findOne({
-      where: { id },
-      relations: { author: true },
-    });
-    return course ? course : {};
+  async findOne(id: number): Promise<Course> {
+    try {
+      const course = await this.courseRepo.findOne({
+        where: { id },
+        relations: { author: true },
+      });
+
+      if (!course) throw new NotFoundException('Course not found.');
+
+      return course;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async create(dto: CreateCourseDto, user: User): Promise<Course> {

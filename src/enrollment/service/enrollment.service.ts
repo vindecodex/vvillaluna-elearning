@@ -85,12 +85,19 @@ export class EnrollmentService {
     };
   }
 
-  async findOne(id: number): Promise<Enrollment | object> {
-    const enrollment = await this.enrollmentRepo.findOne({
-      where: { id },
-      relations: { user: true },
-    });
-    return enrollment ? enrollment : {};
+  async findOne(id: number): Promise<Enrollment> {
+    try {
+      const enrollment = await this.enrollmentRepo.findOne({
+        where: { id },
+        relations: { user: true },
+      });
+
+      if (!enrollment) throw new NotFoundException('Enrollment not found.');
+
+      return enrollment;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(
