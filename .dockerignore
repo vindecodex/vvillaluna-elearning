@@ -1,0 +1,11 @@
+#Dependencies
+node_modules/
+
+#Builds
+dist/
+
+#Public
+uploads/
+
+#Test
+test/
