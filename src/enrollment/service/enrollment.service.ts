@@ -89,7 +89,10 @@ export class EnrollmentService {
   }
 
   async findOne(id: number): Promise<Enrollment | object> {
-    const enrollment = await this.enrollmentRepo.findOne({ where: { id } });
+    const enrollment = await this.enrollmentRepo.findOne({
+      where: { id },
+      relations: { user: true },
+    });
     return enrollment ? enrollment : {};
   }
 

@@ -67,7 +67,10 @@ export class ContentService {
   }
 
   async findOne(id: number): Promise<Content | object> {
-    const content = await this.contentRepo.findOne({ where: { id } });
+    const content = await this.contentRepo.findOne({
+      where: { id },
+      relations: { author: true },
+    });
     return content ? content : {};
   }
 

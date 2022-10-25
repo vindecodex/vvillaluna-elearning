@@ -60,7 +60,8 @@ export class AdminAbility implements RolesAbility {
      * ENROLLMENT  *
      ***************/
     can(Action.READ, Enrollment, {
-      user: { role: Role.ADMIN, id },
+      'user.role': Role.ADMIN,
+      'user.id': id,
     });
     cannot(Action.UPDATE, Enrollment);
     can(Action.DELETE, Enrollment);

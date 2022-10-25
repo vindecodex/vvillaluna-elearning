@@ -56,7 +56,10 @@ export class ModuleService {
   }
 
   async findOne(id: number): Promise<Module | object> {
-    const module = await this.moduleRepo.findOne({ where: { id } });
+    const module = await this.moduleRepo.findOne({
+      where: { id },
+      relations: { author: true },
+    });
     return module ? module : {};
   }
 
