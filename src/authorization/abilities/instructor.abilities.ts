@@ -24,8 +24,7 @@ export class InstructorAbility implements RolesAbility {
     can(Action.READ, User, { id });
     can(Action.UPDATE, User, { id });
     can(Action.DELETE, User, { id });
-    can(Action.READ, User, { role: INSTRUCTOR });
-    can(Action.READ, User, { role: STUDENT });
+    can(Action.READ, User, { role: { $in: [INSTRUCTOR, STUDENT] } });
 
     /***************
      *   SUBJECT   *
