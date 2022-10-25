@@ -20,12 +20,15 @@ const rolesAbilityDraft = (abilityBuilder: AppAbilityBuilder, user: User) => ({
  * Handles which ability to be used
  * depends on what the role of a user
  *
- * usage: roleAbilityFactory.create(role: Role);
+ * usage: roleAbilityFactory.getFor(user: User).using(abilityBuilder: AppAbilityBuilder);
  * returns: class that implements RolesAbility build method
  */
 export const roleAbilityFactory = {
-  create: (role: Role) => {
-    return (abilityBuilder: AppAbilityBuilder, user: User) =>
-      rolesAbilityDraft(abilityBuilder, user)[role];
-  },
+  getFor: (user: User) => ({
+    using: (abilityBuilder: AppAbilityBuilder) => {
+      const role: Role = user.role;
+      const getAbility = rolesAbilityDraft(abilityBuilder, user)[role];
+      return getAbility();
+    },
+  }),
 };

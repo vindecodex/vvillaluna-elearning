@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
 import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
 import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
+import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
+import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -35,7 +37,7 @@ export class ContentService {
       return content;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Title already exist');
+        throw new BadRequestException(alreadyExist('Content'));
       if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
         throw new NotFoundException('Module id doesn\t exist');
       throw e;
@@ -62,12 +64,19 @@ export class ContentService {
     };
   }
 
-  async findOne(id: number): Promise<Content | object> {
-    const content = await this.contentRepo.findOne({
-      where: { id },
-      relations: { author: true },
-    });
-    return content ? content : {};
+  async findOne(id: number): Promise<Content> {
+    try {
+      const content = await this.contentRepo.findOne({
+        where: { id },
+        relations: { author: true },
+      });
+
+      if (!content) throw new NotFoundException(notFound('Content'));
+
+      return content;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(id: number, dto: UpdateContentDto): Promise<Content> {
@@ -76,12 +85,12 @@ export class ContentService {
         id,
         ...dto,
       });
-      if (!content) throw new NotFoundException('Content not found.');
+      if (!content) throw new NotFoundException(notFound('Content'));
       await this.contentRepo.save(content);
       return content;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Content already exist');
+        throw new BadRequestException(alreadyExist('Content'));
       throw e;
     }
   }
@@ -89,6 +98,6 @@ export class ContentService {
   async delete(id: number): Promise<void> {
     const { affected } = await this.contentRepo.delete(id);
     if (affected > 0) return;
-    throw new NotFoundException('Content not found.');
+    throw new NotFoundException(notFound('Content'));
   }
 }

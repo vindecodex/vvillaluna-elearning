@@ -1,10 +1,10 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { ReadUserPolicyHandler } from '../../authorization/policy-handler/user/read-user-policy.handler';
 import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
 import { PoliciesGuard } from '../../shared/guards/policies.guard';
 import { ResponseList } from '../../shared/interfaces/response-list.interface';
-import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
 import { UserService } from '../service/user.service';
 
@@ -14,7 +14,7 @@ export class UserController {
   @Get()
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadUserPolicyHandler)
-  findAll(@Query() dto: PaginationQueryDto): Promise<ResponseList<User>> {
+  findAll(@Query() dto: QueryOptionsDto): Promise<ResponseList<User>> {
     return this.userService.findAll(dto);
   }
 

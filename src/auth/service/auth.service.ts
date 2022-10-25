@@ -21,6 +21,7 @@ import { Cache } from 'cache-manager';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import { ResponseObject } from '../../shared/interfaces/response-object.interface';
+import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
 
 @Injectable()
 export class AuthService {
@@ -51,7 +52,7 @@ export class AuthService {
       return user;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE) {
-        throw new BadRequestException('User already exist');
+        throw new BadRequestException(alreadyExist('User'));
       } else {
         throw new InternalServerErrorException();
       }

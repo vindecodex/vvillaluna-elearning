@@ -1,6 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive } from 'class-validator';
 import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { toArray } from 'src/shared/helpers/to-array.helper';
+import { toBoolean } from 'src/shared/helpers/to-boolean.helper';
 import { ModuleFields } from '../enum/module-fields.enum';
 import { ModuleRelations } from '../enum/module-relations.enum';
 
@@ -15,10 +17,7 @@ export class ModuleQueryDto extends QueryOptionsDto {
 
   @IsOptional()
   @IsIn(Object.values(ModuleRelations), { each: true })
-  @Transform(({ value }) => {
-    if (Array.isArray(value)) return value;
-    return [value];
-  })
+  @Transform(toArray)
   join: TableRelations[];
 
   @IsOptional()
@@ -30,6 +29,6 @@ export class ModuleQueryDto extends QueryOptionsDto {
   duration: number;
 
   @IsOptional()
-  @Transform(({ value }) => value === 'true')
+  @Transform(toBoolean)
   hasContents: string;
 }

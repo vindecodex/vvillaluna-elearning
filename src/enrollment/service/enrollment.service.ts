@@ -9,6 +9,7 @@ import { Module } from 'src/module/entities/module.entity';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
 import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
 import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
+import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -59,7 +60,7 @@ export class EnrollmentService {
           'You are already enrolled in this course',
         );
       if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
-        throw new NotFoundException('Course not found.');
+        throw new NotFoundException(notFound('Course'));
       throw e;
     }
   }
@@ -85,12 +86,19 @@ export class EnrollmentService {
     };
   }
 
-  async findOne(id: number): Promise<Enrollment | object> {
-    const enrollment = await this.enrollmentRepo.findOne({
-      where: { id },
-      relations: { user: true },
-    });
-    return enrollment ? enrollment : {};
+  async findOne(id: number): Promise<Enrollment> {
+    try {
+      const enrollment = await this.enrollmentRepo.findOne({
+        where: { id },
+        relations: { user: true },
+      });
+
+      if (!enrollment) throw new NotFoundException(notFound('Enrollment'));
+
+      return enrollment;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(
@@ -115,6 +123,6 @@ export class EnrollmentService {
   async delete(id: number): Promise<void> {
     const { affected } = await this.enrollmentRepo.delete(id);
     if (affected > 0) return;
-    throw new NotFoundException('Enrollment not found.');
+    throw new NotFoundException(notFound('Enrollment'));
   }
 }

@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
 import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
 import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
+import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
+import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
 import { ResponseList } from 'src/shared/interfaces/response-list.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -55,12 +57,19 @@ export class ModuleService {
     };
   }
 
-  async findOne(id: number): Promise<Module | object> {
-    const module = await this.moduleRepo.findOne({
-      where: { id },
-      relations: { author: true },
-    });
-    return module ? module : {};
+  async findOne(id: number): Promise<Module> {
+    try {
+      const module = await this.moduleRepo.findOne({
+        where: { id },
+        relations: { author: true },
+      });
+
+      if (!module) throw new NotFoundException(notFound('Module'));
+
+      return module;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async update(id: number, dto: UpdateModuleDto): Promise<Module> {
@@ -69,12 +78,12 @@ export class ModuleService {
         id,
         ...dto,
       });
-      if (!module) throw new NotFoundException('Module not found.');
+      if (!module) throw new NotFoundException(notFound('Module'));
       await this.moduleRepo.save(module);
       return module;
     } catch (e) {
       if (e.code === PostgresErrorCode.DUPLICATE)
-        throw new BadRequestException('Title already exist');
+        throw new BadRequestException(alreadyExist('Title'));
       throw e;
     }
   }
@@ -82,6 +91,6 @@ export class ModuleService {
   async delete(id: number): Promise<void> {
     const { affected } = await this.moduleRepo.delete(id);
     if (affected > 0) return;
-    throw new NotFoundException('Module not found.');
+    throw new NotFoundException(notFound('Module'));
   }
 }

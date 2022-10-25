@@ -1,6 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional } from 'class-validator';
 import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { toArray } from 'src/shared/helpers/to-array.helper';
+import { toBoolean } from 'src/shared/helpers/to-boolean.helper';
 import { SubjectFields } from '../enum/subject-fields.enum';
 import { SubjectRelations } from '../enum/subject-relations.enum';
 
@@ -12,10 +14,7 @@ export class SubjectQueryDto extends QueryOptionsDto {
 
   @IsOptional()
   @IsIn(Object.values(SubjectRelations), { each: true })
-  @Transform(({ value }) => {
-    if (Array.isArray(value)) return value;
-    return [value];
-  })
+  @Transform(toArray)
   join: TableRelations[];
 
   /**
@@ -27,6 +26,6 @@ export class SubjectQueryDto extends QueryOptionsDto {
    * https://github.com/typestack/class-transformer/issues/306
    **/
   @IsOptional()
-  @Transform(({ value }) => value === 'true')
+  @Transform(toBoolean)
   courses: string;
 }
