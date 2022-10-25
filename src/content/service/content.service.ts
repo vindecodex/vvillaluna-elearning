@@ -37,7 +37,7 @@ export class ContentService {
       if (e.code === PostgresErrorCode.DUPLICATE)
         throw new BadRequestException('Title already exist');
       if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
-        throw new BadRequestException('Module id doesn\t exist');
+        throw new NotFoundException('Module id doesn\t exist');
       throw e;
     }
   }

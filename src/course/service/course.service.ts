@@ -69,7 +69,7 @@ export class CourseService {
       if (e.code === PostgresErrorCode.DUPLICATE)
         throw new BadRequestException('Title already exist');
       if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
-        throw new BadRequestException("Subject id doesn't exist");
+        throw new NotFoundException("Subject id doesn't exist");
       throw e;
     }
   }
