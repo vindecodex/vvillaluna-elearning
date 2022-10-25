@@ -2,7 +2,6 @@ import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { UpdateCoursePolicyHandler } from 'src/authorization/policy-handler/course/update-course-policy.handler';
-import { Course } from 'src/course/entities/course.entity';
 import { CourseService } from 'src/course/service/course.service';
 
 export const UpdateCoursePolicyProvider: Provider = {
@@ -11,6 +10,6 @@ export const UpdateCoursePolicyProvider: Provider = {
   useFactory: async (courseService: CourseService, request: Request) => {
     const { id } = request.params;
     const course = await courseService.findOne(+id);
-    return new UpdateCoursePolicyHandler(course as Course);
+    return new UpdateCoursePolicyHandler(course);
   },
 };

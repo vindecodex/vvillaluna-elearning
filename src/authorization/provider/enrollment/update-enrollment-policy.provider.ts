@@ -2,7 +2,6 @@ import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { UpdateEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/update-enrollment-policy.handler';
-import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
 import { EnrollmentService } from 'src/enrollment/service/enrollment.service';
 
 export const UpdateEnrollmentPolicyProvider: Provider = {
@@ -14,6 +13,6 @@ export const UpdateEnrollmentPolicyProvider: Provider = {
   ) => {
     const { id } = request.params;
     const enrollment = await enrollmentService.findOne(+id);
-    return new UpdateEnrollmentPolicyHandler(enrollment as Enrollment);
+    return new UpdateEnrollmentPolicyHandler(enrollment);
   },
 };
