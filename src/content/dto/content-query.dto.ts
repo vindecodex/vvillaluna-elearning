@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive } from 'class-validator';
 import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { toArray } from 'src/shared/helpers/to-array.helper';
 import { ContentFields } from '../enum/content-fields.enum';
 import { ContentRelations } from '../enum/content-relations.enum';
 
@@ -12,10 +13,7 @@ export class ContentQueryDto extends QueryOptionsDto {
 
   @IsOptional()
   @IsIn(Object.values(ContentRelations), { each: true })
-  @Transform(({ value }) => {
-    if (Array.isArray(value)) return value;
-    return [value];
-  })
+  @Transform(toArray)
   join: TableRelations[];
 
   @IsPositive()

@@ -1,6 +1,8 @@
 import { Transform, Type } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive, IsUUID } from 'class-validator';
 import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { toArray } from 'src/shared/helpers/to-array.helper';
+import { toBoolean } from 'src/shared/helpers/to-boolean.helper';
 import { EnrollmentFields } from '../enum/enrollment-fields.enum';
 import { EnrollmentRelations } from '../enum/enrollment-relations.enum';
 
@@ -12,10 +14,7 @@ export class EnrollmentQueryDto extends QueryOptionsDto {
 
   @IsOptional()
   @IsIn(Object.values(EnrollmentRelations), { each: true })
-  @Transform(({ value }) => {
-    if (Array.isArray(value)) return value;
-    return [value];
-  })
+  @Transform(toArray)
   join: TableRelations[];
 
   @IsOptional()
@@ -32,6 +31,6 @@ export class EnrollmentQueryDto extends QueryOptionsDto {
   studentId: string;
 
   @IsOptional()
-  @Transform(({ value }) => value === 'true')
+  @Transform(toBoolean)
   completed: string;
 }

@@ -7,14 +7,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { ResponseList } from '../../shared/interfaces/response-list.interface';
 import { Repository } from 'typeorm';
-import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
+import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
 
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
-  async findAll(dto: PaginationQueryDto): Promise<ResponseList<User>> {
+  async findAll(dto: QueryOptionsDto): Promise<ResponseList<User>> {
     const { page, limit } = dto;
     const users = await this.userRepo.find({ skip: page - 1, take: limit });
     const totalCount = await this.userRepo.countBy({ isActive: true });
