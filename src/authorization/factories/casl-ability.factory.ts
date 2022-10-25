@@ -17,10 +17,8 @@ export class CaslAbilityFactory {
       Ability as AbilityClass<AppAbility>,
     );
 
-    const setRolesAbility = roleAbilityFactory.create(user.role);
-    const ability = setRolesAbility(abilityBuilder, user);
-    const builder = ability();
+    const userAbility = roleAbilityFactory.getFor(user).using(abilityBuilder);
 
-    return builder.build();
+    return userAbility.build();
   }
 }
