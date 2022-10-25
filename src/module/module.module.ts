@@ -3,10 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModuleController } from './controller/module.controller';
 import { ModuleService } from './service/module.service';
 import { Module as ModuleEntity } from './entities/module.entity';
+import { CaslAbilityFactory } from 'src/authorization/factories/casl-ability.factory';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ModuleEntity])],
   controllers: [ModuleController],
-  providers: [ModuleService],
+  providers: [ModuleService, CaslAbilityFactory],
+  exports: [ModuleService],
 })
 export class ModuleModule {}

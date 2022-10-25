@@ -1,12 +1,12 @@
 import { Action } from '../../enums/action.enum';
 import { PolicyHandler } from '../../interfaces/policy-handler.interface';
 import { AppAbility } from '../../types/app-ability-builder.type';
-import { Subject } from 'src/subject/entities/subject.entity';
+import { Module } from 'src/module/entities/module.entity';
 
-export class CreateSubjectPolicyHandler implements PolicyHandler {
-  constructor(private subject: Subject) {}
+export class DeleteModulePolicyHandler implements PolicyHandler {
+  constructor(private module: Module) {}
 
   handle(ability: AppAbility) {
-    return ability.can(Action.CREATE, this.subject);
+    return ability.can(Action.DELETE, this.module);
   }
 }
