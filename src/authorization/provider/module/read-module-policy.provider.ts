@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { ReadModulePolicyHandler } from 'src/authorization/policy-handler/module/read-module-policy.handler';
-import { ModuleService } from 'src/module/service/module.service';
+import { ReadModulePolicyHandler } from '../../../authorization/policy-handler/module/read-module-policy.handler';
+import { ModuleService } from '../../../module/service/module.service';
 
 export const ReadModulePolicyProvider: Provider = {
   provide: ReadModulePolicyHandler,

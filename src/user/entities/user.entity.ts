@@ -10,10 +10,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Subject } from '../../subject/entities/subject.entity';
-import { Course } from 'src/course/entities/course.entity';
-import { Module } from 'src/module/entities/module.entity';
-import { Content } from 'src/content/entities/content.entity';
-import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
+import { Course } from '../../course/entities/course.entity';
+import { Module } from '../../module/entities/module.entity';
+import { Content } from '../../content/entities/content.entity';
+import { Enrollment } from '../../enrollment/entities/enrollment.entity';
 
 @Entity()
 export class User {

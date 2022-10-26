@@ -13,16 +13,16 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateCoursePolicyHandler } from 'src/authorization/policy-handler/course/create-course-policy.handler';
-import { DeleteCoursePolicyHandler } from 'src/authorization/policy-handler/course/delete-course-policy.handler';
-import { ReadCoursePolicyHandler } from 'src/authorization/policy-handler/course/read-course-policy.handler';
-import { UpdateCoursePolicyHandler } from 'src/authorization/policy-handler/course/update-course-policy.handler';
-import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
-import { PoliciesGuard } from 'src/shared/guards/policies.guard';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { CreateCoursePolicyHandler } from '../../authorization/policy-handler/course/create-course-policy.handler';
+import { DeleteCoursePolicyHandler } from '../../authorization/policy-handler/course/delete-course-policy.handler';
+import { ReadCoursePolicyHandler } from '../../authorization/policy-handler/course/read-course-policy.handler';
+import { UpdateCoursePolicyHandler } from '../../authorization/policy-handler/course/update-course-policy.handler';
+import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
+import { GetUser } from '../../shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from '../../shared/guards/policies.guard';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { CourseQueryDto } from '../dto/course-query.dto';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';

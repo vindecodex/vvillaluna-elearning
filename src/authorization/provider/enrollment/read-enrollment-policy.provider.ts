@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { ReadEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/read-enrollment-policy.handler';
-import { EnrollmentService } from 'src/enrollment/service/enrollment.service';
+import { ReadEnrollmentPolicyHandler } from '../../../authorization/policy-handler/enrollment/read-enrollment-policy.handler';
+import { EnrollmentService } from '../../../enrollment/service/enrollment.service';
 
 export const ReadEnrollmentPolicyProvider: Provider = {
   provide: ReadEnrollmentPolicyHandler,

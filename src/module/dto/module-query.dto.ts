@@ -1,8 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive } from 'class-validator';
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
-import { toArray } from 'src/shared/helpers/to-array.helper';
-import { toBoolean } from 'src/shared/helpers/to-boolean.helper';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
+import { toArray } from '../../shared/helpers/to-array.helper';
+import { toBoolean } from '../../shared/helpers/to-boolean.helper';
 import { ModuleFields } from '../enum/module-fields.enum';
 import { ModuleRelations } from '../enum/module-relations.enum';
 

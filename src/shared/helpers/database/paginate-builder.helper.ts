@@ -1,4 +1,4 @@
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { QueryOptionsDto } from '../../dto/query-options.dto';
 import { SelectQueryBuilder } from 'typeorm';
 
 export const paginateBuilder = <ENTITY, DTO = QueryOptionsDto>(

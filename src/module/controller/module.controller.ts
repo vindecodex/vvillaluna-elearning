@@ -9,16 +9,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { CreateModulePolicyHandler } from 'src/authorization/policy-handler/module/create-module-policy.handler';
-import { DeleteModulePolicyHandler } from 'src/authorization/policy-handler/module/delete-module-policy.handler';
-import { ReadModulePolicyHandler } from 'src/authorization/policy-handler/module/read-module-policy.handler';
-import { UpdateModulePolicyHandler } from 'src/authorization/policy-handler/module/update-module-policy.handler';
-import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
-import { PoliciesGuard } from 'src/shared/guards/policies.guard';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { CreateModulePolicyHandler } from '../../authorization/policy-handler/module/create-module-policy.handler';
+import { DeleteModulePolicyHandler } from '../../authorization/policy-handler/module/delete-module-policy.handler';
+import { ReadModulePolicyHandler } from '../../authorization/policy-handler/module/read-module-policy.handler';
+import { UpdateModulePolicyHandler } from '../../authorization/policy-handler/module/update-module-policy.handler';
+import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
+import { GetUser } from '../../shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from '../../shared/guards/policies.guard';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { CreateModuleDto } from '../dto/create-module.dto';
 import { ModuleQueryDto } from '../dto/module-query.dto';
 import { UpdateModuleDto } from '../dto/update-module.dto';

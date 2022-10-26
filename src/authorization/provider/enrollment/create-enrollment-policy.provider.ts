@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { CreateEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/create-enrollment-policy.handler';
-import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
-import { User } from 'src/user/entities/user.entity';
+import { CreateEnrollmentPolicyHandler } from '../../../authorization/policy-handler/enrollment/create-enrollment-policy.handler';
+import { Enrollment } from '../../../enrollment/entities/enrollment.entity';
+import { User } from '../../../user/entities/user.entity';
 
 export const CreateEnrollmentPolicyProvider: Provider = {
   provide: CreateEnrollmentPolicyHandler,

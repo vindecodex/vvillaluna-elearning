@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
-import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
+import { notFound } from '../../shared/helpers/error-message/not-found.helper';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
 import { Repository } from 'typeorm';
 import { CreateEnrollmentModuleDto } from '../dto/create-enrollment-module.dto';
 import { UpdateEnrollmentModuleDto } from '../dto/update-enrollment-module.dto';

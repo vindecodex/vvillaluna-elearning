@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { DeleteEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/delete-enrollment-policy.handler';
-import { EnrollmentService } from 'src/enrollment/service/enrollment.service';
+import { DeleteEnrollmentPolicyHandler } from '../../../authorization/policy-handler/enrollment/delete-enrollment-policy.handler';
+import { EnrollmentService } from '../../../enrollment/service/enrollment.service';
 
 export const DeleteEnrollmentPolicyProvider: Provider = {
   provide: DeleteEnrollmentPolicyHandler,

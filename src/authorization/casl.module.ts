@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ContentModule } from 'src/content/content.module';
-import { CourseModule } from 'src/course/course.module';
-import { EnrollmentModule } from 'src/enrollment/enrollment.module';
-import { ModuleModule } from 'src/module/module.module';
-import { SubjectModule } from 'src/subject/subject.module';
-import { UserModule } from 'src/user/user.module';
+import { ContentModule } from '../content/content.module';
+import { CourseModule } from '../course/course.module';
+import { EnrollmentModule } from '../enrollment/enrollment.module';
+import { ModuleModule } from '../module/module.module';
+import { SubjectModule } from '../subject/subject.module';
+import { UserModule } from '../user/user.module';
 import { CaslAbilityFactory } from './factories/casl-ability.factory';
 import { contentPolicyProviders } from './provider/content';
 import { coursePolicyProviders } from './provider/course';

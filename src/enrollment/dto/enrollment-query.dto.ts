@@ -1,8 +1,8 @@
 import { Transform, Type } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive, IsUUID } from 'class-validator';
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
-import { toArray } from 'src/shared/helpers/to-array.helper';
-import { toBoolean } from 'src/shared/helpers/to-boolean.helper';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
+import { toArray } from '../../shared/helpers/to-array.helper';
+import { toBoolean } from '../../shared/helpers/to-boolean.helper';
 import { EnrollmentFields } from '../enum/enrollment-fields.enum';
 import { EnrollmentRelations } from '../enum/enrollment-relations.enum';
 

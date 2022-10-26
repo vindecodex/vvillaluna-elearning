@@ -4,14 +4,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
-import { Module } from 'src/module/entities/module.entity';
-import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
-import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
-import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
-import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { EnrollmentModule } from '../../enrollment-module/entities/enrollment-module.entity';
+import { Module } from '../../module/entities/module.entity';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
+import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.helper';
+import { notFound } from '../../shared/helpers/error-message/not-found.helper';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateEnrollmentDto } from '../dto/create-enrollment.dto';
 import { EnrollmentQueryDto } from '../dto/enrollment-query.dto';

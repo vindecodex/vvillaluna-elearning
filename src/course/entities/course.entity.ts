@@ -1,7 +1,7 @@
-import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
-import { Module } from 'src/module/entities/module.entity';
-import { Subject } from 'src/subject/entities/subject.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Enrollment } from '../../enrollment/entities/enrollment.entity';
+import { Module } from '../../module/entities/module.entity';
+import { Subject } from '../../subject/entities/subject.entity';
+import { User } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,

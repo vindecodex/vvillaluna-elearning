@@ -4,8 +4,9 @@ import {
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { Repository } from 'typeorm';
-import { PaginationQueryDto } from '../dto/pagination-query.dto';
 import { User } from '../entities/user.entity';
 import { UserService } from './user.service';
 
@@ -47,7 +48,7 @@ describe('UserService', () => {
 
   describe('usersService.findAll', () => {
     it('should return array of users', async () => {
-      const paginationQuery: PaginationQueryDto = { page: 1, limit: 5 };
+      const paginationQuery: Partial<QueryOptionsDto> = { page: 1, limit: 5 };
       const totalCount = 10;
       const expected = {
         data: [mockUser],
@@ -57,7 +58,9 @@ describe('UserService', () => {
       };
       userRepo.find.mockResolvedValue([mockUser]);
       userRepo.countBy.mockResolvedValue(totalCount);
-      const result = await usersService.findAll(paginationQuery);
+      const result = await usersService.findAll(
+        paginationQuery as QueryOptionsDto,
+      );
       expect(result).toEqual(expected);
     });
   });
@@ -70,25 +73,24 @@ describe('UserService', () => {
       expect(result).toEqual(expected);
     });
 
-    it('should return empty object if no users found', async () => {
-      const expected = {};
+    it('should throw BadRequestException if no users found', async () => {
       userRepo.findOne.mockResolvedValue(null);
-      const result = await usersService.findOne('uuid');
-      expect(result).toEqual(expected);
+      await expect(usersService.findOne('uuid')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException error if id passed is not uuid format', async () => {
-      const classValidatorInvalidUUIDErrorCode = '22P02';
       userRepo.findOne.mockRejectedValue({
-        code: classValidatorInvalidUUIDErrorCode,
+        code: PostgresErrorCode.INVALID_INPUT,
       });
       await expect(usersService.findOne('uuid')).rejects.toThrow(
         BadRequestException,
       );
     });
 
-    it('unhandled error should throw InternalServerErrorException', async () => {
-      userRepo.findOne.mockRejectedValue(false);
+    it('should throw InternalServerErrorException for unhandled error', async () => {
+      userRepo.findOne.mockRejectedValue(new InternalServerErrorException());
       await expect(usersService.findOne('uuid')).rejects.toThrow(
         InternalServerErrorException,
       );

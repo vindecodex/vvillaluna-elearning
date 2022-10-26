@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { UpdateModulePolicyHandler } from 'src/authorization/policy-handler/module/update-module-policy.handler';
-import { ModuleService } from 'src/module/service/module.service';
+import { UpdateModulePolicyHandler } from '../../../authorization/policy-handler/module/update-module-policy.handler';
+import { ModuleService } from '../../../module/service/module.service';
 
 export const UpdateModulePolicyProvider: Provider = {
   provide: UpdateModulePolicyHandler,

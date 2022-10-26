@@ -9,16 +9,16 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { CreateContentPolicyHandler } from 'src/authorization/policy-handler/content/create-content-policy.handler';
-import { DeleteContentPolicyHandler } from 'src/authorization/policy-handler/content/delete-content-policy.handler';
-import { ReadContentPolicyHandler } from 'src/authorization/policy-handler/content/read-content-policy.handler';
-import { UpdateContentPolicyHandler } from 'src/authorization/policy-handler/content/update-content-policy.handler';
-import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
-import { PoliciesGuard } from 'src/shared/guards/policies.guard';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { CreateContentPolicyHandler } from '../../authorization/policy-handler/content/create-content-policy.handler';
+import { DeleteContentPolicyHandler } from '../../authorization/policy-handler/content/delete-content-policy.handler';
+import { ReadContentPolicyHandler } from '../../authorization/policy-handler/content/read-content-policy.handler';
+import { UpdateContentPolicyHandler } from '../../authorization/policy-handler/content/update-content-policy.handler';
+import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
+import { GetUser } from '../../shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from '../../shared/guards/policies.guard';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { ContentQueryDto } from '../dto/content-query.dto';
 import { CreateContentDto } from '../dto/create-content.dto';
 import { UpdateContentDto } from '../dto/update-content.dto';

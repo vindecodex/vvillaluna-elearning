@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { IsEqualTo } from 'src/shared/validators/is-equal-to.validator';
+import { IsEqualTo } from '../../shared/validators/is-equal-to.validator';
 
 export class ResetPasswordDto {
   @IsNotEmpty()

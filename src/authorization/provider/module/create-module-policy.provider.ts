@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { CreateModulePolicyHandler } from 'src/authorization/policy-handler/module/create-module-policy.handler';
-import { Module } from 'src/module/entities/module.entity';
-import { User } from 'src/user/entities/user.entity';
+import { CreateModulePolicyHandler } from '../../../authorization/policy-handler/module/create-module-policy.handler';
+import { Module } from '../../../module/entities/module.entity';
+import { User } from '../../../user/entities/user.entity';
 
 export const CreateModulePolicyProvider: Provider = {
   provide: CreateModulePolicyHandler,

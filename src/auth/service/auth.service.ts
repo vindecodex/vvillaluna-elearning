@@ -21,7 +21,7 @@ import { Cache } from 'cache-manager';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import { ResponseObject } from '../../shared/interfaces/response-object.interface';
-import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
+import { alreadyExist } from '../../shared/helpers/error-message/already-exist.helper';
 
 @Injectable()
 export class AuthService {
@@ -100,7 +100,7 @@ export class AuthService {
     await this.cacheService.set(accessToken, accessToken, { ttl: 3600 * 24 });
     return {
       status: 'success',
-      message: "You' been logged out!",
+      message: "You've been logged out!",
     };
   }
 
