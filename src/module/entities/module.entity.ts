@@ -1,7 +1,7 @@
-import { Content } from 'src/content/entities/content.entity';
-import { Course } from 'src/course/entities/course.entity';
-import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Content } from '../../content/entities/content.entity';
+import { Course } from '../../course/entities/course.entity';
+import { EnrollmentModule } from '../../enrollment-module/entities/enrollment-module.entity';
+import { User } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,

@@ -17,9 +17,9 @@ import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.
 import { whereBuilder } from '../helpers/where-builder.helper';
 import { sortBuilder } from '../helpers/sort-builder.helper';
 import { joinBuilder } from '../helpers/join-builder.helper';
-import { Uploads } from 'src/shared/enums/uploads.enum';
-import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
-import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
+import { Uploads } from '../../shared/enums/uploads.enum';
+import { notFound } from '../../shared/helpers/error-message/not-found.helper';
+import { alreadyExist } from '../../shared/helpers/error-message/already-exist.helper';
 
 @Injectable()
 export class CourseService {

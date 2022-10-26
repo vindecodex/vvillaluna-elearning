@@ -1,14 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { ResponseList } from '../../shared/interfaces/response-list.interface';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
 
 @Injectable()
 export class UserService {
@@ -36,9 +32,8 @@ export class UserService {
     } catch (e) {
       if (e.code === PostgresErrorCode.INVALID_INPUT) {
         throw new BadRequestException('Invalid ID format provided');
-      } else {
-        throw new InternalServerErrorException();
       }
+      throw e;
     }
   }
 }

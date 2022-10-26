@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
-import { buildQueryFrom } from 'src/shared/helpers/database/build-query-from.helper';
-import { paginateBuilder } from 'src/shared/helpers/database/paginate-builder.helper';
-import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
-import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
+import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
+import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.helper';
+import { alreadyExist } from '../../shared/helpers/error-message/already-exist.helper';
+import { notFound } from '../../shared/helpers/error-message/not-found.helper';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ContentQueryDto } from '../dto/content-query.dto';
 import { CreateContentDto } from '../dto/create-content.dto';

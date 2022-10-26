@@ -1,5 +1,5 @@
-import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
-import { Module } from 'src/module/entities/module.entity';
+import { Enrollment } from '../../enrollment/entities/enrollment.entity';
+import { Module } from '../../module/entities/module.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

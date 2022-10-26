@@ -1,4 +1,4 @@
-import { SortDirection } from 'src/shared/enums/sort-direction.enum';
+import { SortDirection } from '../../shared/enums/sort-direction.enum';
 import { SelectQueryBuilder } from 'typeorm';
 import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { Subject } from '../entities/subject.entity';

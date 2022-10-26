@@ -1,4 +1,4 @@
-import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
+import { Enrollment } from '../../../enrollment/entities/enrollment.entity';
 import { Action } from '../../enums/action.enum';
 import { PolicyHandler } from '../../interfaces/policy-handler.interface';
 import { AppAbility } from '../../types/app-ability-builder.type';

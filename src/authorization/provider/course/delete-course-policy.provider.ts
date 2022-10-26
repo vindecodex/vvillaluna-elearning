@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { DeleteCoursePolicyHandler } from 'src/authorization/policy-handler/course/delete-course-policy.handler';
-import { CourseService } from 'src/course/service/course.service';
+import { DeleteCoursePolicyHandler } from '../../../authorization/policy-handler/course/delete-course-policy.handler';
+import { CourseService } from '../../../course/service/course.service';
 
 export const DeleteCoursePolicyProvider: Provider = {
   provide: DeleteCoursePolicyHandler,

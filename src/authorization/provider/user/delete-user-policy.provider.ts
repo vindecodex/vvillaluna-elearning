@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { DeleteUserPolicyHandler } from 'src/authorization/policy-handler/user/delete-user-policy.handler';
-import { User } from 'src/user/entities/user.entity';
+import { DeleteUserPolicyHandler } from '../../../authorization/policy-handler/user/delete-user-policy.handler';
+import { User } from '../../../user/entities/user.entity';
 
 export const DeleteUserPolicyProvider: Provider = {
   provide: DeleteUserPolicyHandler,

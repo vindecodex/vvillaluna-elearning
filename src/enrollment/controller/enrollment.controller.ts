@@ -9,17 +9,17 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { CreateEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/create-enrollment-policy.handler';
-import { DeleteEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/delete-enrollment-policy.handler';
-import { ReadEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/read-enrollment-policy.handler';
-import { UpdateEnrollmentPolicyHandler } from 'src/authorization/policy-handler/enrollment/update-enrollment-policy.handler';
-import { EnrollmentModule } from 'src/enrollment-module/entities/enrollment-module.entity';
-import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
-import { PoliciesGuard } from 'src/shared/guards/policies.guard';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { CreateEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/create-enrollment-policy.handler';
+import { DeleteEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/delete-enrollment-policy.handler';
+import { ReadEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/read-enrollment-policy.handler';
+import { UpdateEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/update-enrollment-policy.handler';
+import { EnrollmentModule } from '../../enrollment-module/entities/enrollment-module.entity';
+import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
+import { GetUser } from '../../shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from '../../shared/guards/policies.guard';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { CreateEnrollmentDto } from '../dto/create-enrollment.dto';
 import { EnrollmentQueryDto } from '../dto/enrollment-query.dto';
 import { UpdateEnrollmentDto } from '../dto/update-enrollment.dto';

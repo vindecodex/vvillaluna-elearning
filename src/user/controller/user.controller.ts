@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { ReadUserPolicyHandler } from '../../authorization/policy-handler/user/read-user-policy.handler';
 import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
 import { PoliciesGuard } from '../../shared/guards/policies.guard';

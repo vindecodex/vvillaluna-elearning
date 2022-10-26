@@ -1,8 +1,8 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { ReadContentPolicyHandler } from 'src/authorization/policy-handler/content/read-content-policy.handler';
-import { ContentService } from 'src/content/service/content.service';
+import { ReadContentPolicyHandler } from '../../../authorization/policy-handler/content/read-content-policy.handler';
+import { ContentService } from '../../../content/service/content.service';
 
 export const ReadContentPolicyProvider: Provider = {
   provide: ReadContentPolicyHandler,

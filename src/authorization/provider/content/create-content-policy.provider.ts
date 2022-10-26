@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { CreateContentPolicyHandler } from 'src/authorization/policy-handler/content/create-content-policy.handler';
-import { Content } from 'src/content/entities/content.entity';
-import { User } from 'src/user/entities/user.entity';
+import { CreateContentPolicyHandler } from '../../../authorization/policy-handler/content/create-content-policy.handler';
+import { Content } from '../../../content/entities/content.entity';
+import { User } from '../../../user/entities/user.entity';
 
 export const CreateContentPolicyProvider: Provider = {
   provide: CreateContentPolicyHandler,

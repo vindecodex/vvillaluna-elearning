@@ -10,16 +10,16 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { CreateSubjectPolicyHandler } from 'src/authorization/policy-handler/subject/create-subject-policy.handler';
-import { DeleteSubjectPolicyHandler } from 'src/authorization/policy-handler/subject/delete-subject-policy.handler';
-import { ReadSubjectPolicyHandler } from 'src/authorization/policy-handler/subject/read-subject-policy.handler';
-import { UpdateSubjectPolicyHandler } from 'src/authorization/policy-handler/subject/update-subject-policy.handler';
-import { CheckPolicies } from 'src/shared/decorators/check-policies.decorator';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
-import { PoliciesGuard } from 'src/shared/guards/policies.guard';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { CreateSubjectPolicyHandler } from '../../authorization/policy-handler/subject/create-subject-policy.handler';
+import { DeleteSubjectPolicyHandler } from '../../authorization/policy-handler/subject/delete-subject-policy.handler';
+import { ReadSubjectPolicyHandler } from '../../authorization/policy-handler/subject/read-subject-policy.handler';
+import { UpdateSubjectPolicyHandler } from '../../authorization/policy-handler/subject/update-subject-policy.handler';
+import { CheckPolicies } from '../../shared/decorators/check-policies.decorator';
+import { GetUser } from '../../shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { PoliciesGuard } from '../../shared/guards/policies.guard';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { CreateSubjectDto } from '../dto/create-subject.dto';
 import { SubjectQueryDto } from '../dto/subject-query.dto';
 import { UpdateSubjectDto } from '../dto/update-subject.dto';

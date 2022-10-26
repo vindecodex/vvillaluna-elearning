@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostgresErrorCode } from 'src/shared/enums/error-code/postgres.enum';
-import { ResponseList } from 'src/shared/interfaces/response-list.interface';
-import { User } from 'src/user/entities/user.entity';
+import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
+import { ResponseList } from '../../shared/interfaces/response-list.interface';
+import { User } from '../../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateSubjectDto } from '../dto/create-subject.dto';
 import { SubjectQueryDto } from '../dto/subject-query.dto';
@@ -17,8 +17,8 @@ import { sortBuilder } from '../helpers/sort-builder.helper';
 import { whereBuilder } from '../helpers/where-builder.helper';
 import { buildQueryFrom } from '../../shared/helpers/database/build-query-from.helper';
 import { paginateBuilder } from '../../shared/helpers/database/paginate-builder.helper';
-import { notFound } from 'src/shared/helpers/error-message/not-found.helper';
-import { alreadyExist } from 'src/shared/helpers/error-message/already-exist.helper';
+import { notFound } from '../../shared/helpers/error-message/not-found.helper';
+import { alreadyExist } from '../../shared/helpers/error-message/already-exist.helper';
 
 @Injectable()
 export class SubjectService {

@@ -1,8 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional } from 'class-validator';
-import { QueryOptionsDto } from 'src/shared/dto/query-options.dto';
-import { toArray } from 'src/shared/helpers/to-array.helper';
-import { toBoolean } from 'src/shared/helpers/to-boolean.helper';
+import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
+import { toArray } from '../../shared/helpers/to-array.helper';
+import { toBoolean } from '../../shared/helpers/to-boolean.helper';
 import { SubjectFields } from '../enum/subject-fields.enum';
 import { SubjectRelations } from '../enum/subject-relations.enum';
 

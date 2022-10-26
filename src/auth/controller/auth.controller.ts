@@ -19,7 +19,7 @@ import { AuthResponse } from '../interfaces/auth-response.interface';
 import { ResponseObject } from '../../shared/interfaces/response-object.interface';
 import { LocalAuthGuard } from '../../shared/guards/local-auth.guard';
 import { RequestResetPasswordDto } from '../dto/request-reset-password.dto';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 
 @Controller()
 export class AuthController {
