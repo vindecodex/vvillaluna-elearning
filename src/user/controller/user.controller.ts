@@ -21,7 +21,7 @@ export class UserController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadUserPolicyHandler)
-  findOne(@Param('id') id: string): Promise<User | object> {
+  findOne(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id);
   }
 }

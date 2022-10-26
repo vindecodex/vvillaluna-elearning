@@ -40,7 +40,7 @@ export class CourseController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadCoursePolicyHandler)
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Course | object> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Course> {
     return this.courseService.findOne(id);
   }
 

@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  api:
+    build: .
+    restart: always
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+    command: bash -c 'while !</dev/tcp/db/5432 || !</dev/tcp/redis/6379; do sleep 1; done; npm run start:dev'
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+      - redis
   db:
     image: postgres
     restart: always

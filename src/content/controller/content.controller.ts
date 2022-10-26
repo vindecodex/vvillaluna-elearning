@@ -47,7 +47,7 @@ export class ContentController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(ReadContentPolicyHandler)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Content> {
     return this.contentService.findOne(+id);
   }
 
