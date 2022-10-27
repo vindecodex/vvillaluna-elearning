@@ -54,7 +54,6 @@ export class EnrollmentService {
       await this.enrollmentRepo.save(enrollment);
       return enrollment;
     } catch (e) {
-      console.log(e);
       if (e.code === PostgresErrorCode.DUPLICATE)
         throw new BadRequestException(
           'You are already enrolled in this course',
@@ -105,19 +104,30 @@ export class EnrollmentService {
     id: number,
     dto: UpdateEnrollmentDto,
   ): Promise<EnrollmentModule> {
-    const { moduleId, isCompleted } = dto;
-    const moduleEnrollment = await this.enrollmentModuleRepo.findOneBy({
-      enrollment: { id },
-      module: { id: moduleId },
-    });
-    const updatedEnrollmentModule = await this.enrollmentModuleRepo.preload({
-      id: moduleEnrollment.id,
-      enrollment: { id },
-      module: { id: moduleId },
-      isCompleted,
-    });
+    try {
+      const { moduleId, isCompleted } = dto;
+      const enrollmentModule = await this.enrollmentModuleRepo.findOneBy({
+        enrollment: { id },
+        module: { id: moduleId },
+      });
 
-    return this.enrollmentModuleRepo.save(updatedEnrollmentModule);
+      const updatedEnrollmentModule = await this.enrollmentModuleRepo.preload({
+        id: enrollmentModule.id,
+        enrollment: { id },
+        module: { id: moduleId },
+        isCompleted,
+      });
+
+      const result = await this.enrollmentModuleRepo.save(
+        updatedEnrollmentModule,
+      );
+
+      return result;
+    } catch (e) {
+      if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
+        throw new NotFoundException(notFound('Module'));
+      throw e;
+    }
   }
 
   async delete(id: number): Promise<void> {
