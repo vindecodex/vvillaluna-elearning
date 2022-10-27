@@ -38,7 +38,7 @@ describe('SubjectService', () => {
   });
 
   describe('subjectService.findOne', () => {
-    it('should return subject', async () => {
+    it('should return subject after creation success', async () => {
       const subject = new Subject();
       subjectRepo.findOne.mockResolvedValue(subject);
       const result = await subjectService.findOne(1);
