@@ -26,14 +26,23 @@ export class ModuleService {
     @InjectRepository(Module) private moduleRepo: Repository<Module>,
   ) {}
   async create(dto: CreateModuleDto, user: User): Promise<Module> {
-    const { courseId } = dto;
-    const module = this.moduleRepo.create({
-      ...dto,
-      author: { id: user.id },
-      course: { id: courseId },
-    });
-    await this.moduleRepo.save(module);
-    return module;
+    try {
+      const { courseId } = dto;
+      const module = this.moduleRepo.create({
+        ...dto,
+        author: { id: user.id },
+        course: { id: courseId },
+      });
+
+      await this.moduleRepo.save(module);
+      return module;
+    } catch (e) {
+      if (e.code === PostgresErrorCode.INVALID_RELATION_KEY)
+        throw new NotFoundException(notFound('Course'));
+      if (e.code === PostgresErrorCode.DUPLICATE)
+        throw new BadRequestException(alreadyExist('Module'));
+      throw e;
+    }
   }
 
   async findAll(dto: ModuleQueryDto): Promise<ResponseList<Module>> {
