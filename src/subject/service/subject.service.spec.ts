@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Subject } from '../entities/subject.entity';
 import { SubjectService } from './subject.service';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
+import { SubjectQueryDto } from '../dto/subject-query.dto';
 
 type MockSubjectRepo<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const mockSubjectRepo = (): MockSubjectRepo => ({
@@ -15,6 +16,7 @@ const mockSubjectRepo = (): MockSubjectRepo => ({
   delete: jest.fn(),
   save: jest.fn(),
   preload: jest.fn(),
+  createQueryBuilder: jest.fn(),
 });
 
 describe('SubjectService', () => {
@@ -35,6 +37,25 @@ describe('SubjectService', () => {
 
   it('should be defined', () => {
     expect(subjectService).toBeDefined();
+  });
+
+  describe('subjectService.findAll', () => {
+    it('should return ResponseList type Subject', async () => {
+      const qb = {
+        leftJoin: jest.fn().mockReturnValue(true),
+        leftJoinAndSelect: jest.fn().mockReturnValue(true),
+        orderBy: jest.fn().mockReturnValue(true),
+        where: jest.fn().mockReturnValue(true),
+        andWhere: jest.fn().mockReturnValue(true),
+        take: jest
+          .fn()
+          .mockReturnValue({ skip: jest.fn().mockReturnValue(true) }),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      };
+      subjectRepo.createQueryBuilder.mockReturnValue(qb);
+      const result = await subjectService.findAll(new SubjectQueryDto());
+      expect(result).toEqual({ data: [], totalCount: 0, page: 1, limit: 25 });
+    });
   });
 
   describe('subjectService.findOne', () => {
