@@ -8,6 +8,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { UpdateCourseDto } from '../dto/update-course.dto';
+import { CourseQueryDto } from '../dto/course-query.dto';
 
 type MockCourseRepo<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const mockCourseRepo = (): MockCourseRepo => ({
@@ -17,6 +18,7 @@ const mockCourseRepo = (): MockCourseRepo => ({
   delete: jest.fn(),
   save: jest.fn(),
   preload: jest.fn(),
+  createQueryBuilder: jest.fn(),
 });
 
 describe('CourseService', () => {
@@ -40,6 +42,25 @@ describe('CourseService', () => {
 
   it('should be defined', () => {
     expect(courseService).toBeDefined();
+  });
+
+  describe('courseService.findAll', () => {
+    it('should return ResponseList type Course', async () => {
+      const qb = {
+        leftJoin: jest.fn().mockReturnValue(true),
+        leftJoinAndSelect: jest.fn().mockReturnValue(true),
+        orderBy: jest.fn().mockReturnValue(true),
+        where: jest.fn().mockReturnValue(true),
+        andWhere: jest.fn().mockReturnValue(true),
+        take: jest
+          .fn()
+          .mockReturnValue({ skip: jest.fn().mockReturnValue(true) }),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      };
+      courseRepo.createQueryBuilder.mockReturnValue(qb);
+      const result = await courseService.findAll(new CourseQueryDto());
+      expect(result).toEqual({ data: [], totalCount: 0, page: 1, limit: 25 });
+    });
   });
 
   describe('courseService.findOne', () => {
