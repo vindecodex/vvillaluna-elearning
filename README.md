@@ -37,7 +37,9 @@ Running the API server:
 ## Testing
 
 ##### Unit Testing
-Working In Progress
+Run unit test: `npm t`
+
+Run unit test with coverage: `npm run test:cov`
 
 ##### E2E Testing
 Working In Progress
