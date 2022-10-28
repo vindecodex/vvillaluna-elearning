@@ -7,6 +7,7 @@ import { Module } from '../entities/module.entity';
 import { ModuleService } from './module.service';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { ModuleQueryDto } from '../dto/module-query.dto';
 
 type MockModuleRepo<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const mockModuleRepo = (): MockModuleRepo => ({
@@ -16,6 +17,7 @@ const mockModuleRepo = (): MockModuleRepo => ({
   delete: jest.fn(),
   save: jest.fn(),
   preload: jest.fn(),
+  createQueryBuilder: jest.fn(),
 });
 
 describe('ModuleService', () => {
@@ -68,6 +70,25 @@ describe('ModuleService', () => {
       await expect(
         moduleService.create(dto as CreateModuleDto, user),
       ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('moduleService.findAll', () => {
+    it('should return ResponseList type Module', async () => {
+      const qb = {
+        leftJoin: jest.fn().mockReturnValue(true),
+        leftJoinAndSelect: jest.fn().mockReturnValue(true),
+        orderBy: jest.fn().mockReturnValue(true),
+        where: jest.fn().mockReturnValue(true),
+        andWhere: jest.fn().mockReturnValue(true),
+        take: jest
+          .fn()
+          .mockReturnValue({ skip: jest.fn().mockReturnValue(true) }),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      };
+      moduleRepo.createQueryBuilder.mockReturnValue(qb);
+      const result = await moduleService.findAll(new ModuleQueryDto());
+      expect(result).toEqual({ data: [], totalCount: 0, page: 1, limit: 25 });
     });
   });
 
