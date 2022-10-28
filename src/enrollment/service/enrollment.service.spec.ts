@@ -8,6 +8,7 @@ import { EnrollmentService } from './enrollment.service';
 import { User } from '../../user/entities/user.entity';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { EnrollmentQueryDto } from '../dto/enrollment-query.dto';
 
 type MockType<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 type MockEnrollmentRepo = MockType;
@@ -17,6 +18,7 @@ const mockEnrollmentRepo = (): MockEnrollmentRepo => ({
   update: jest.fn(),
   delete: jest.fn(),
   save: jest.fn(),
+  createQueryBuilder: jest.fn(),
 });
 
 type MockEnrollmentModuleRepo = MockType;
@@ -107,6 +109,25 @@ describe('EnrollmentService', () => {
       await expect(
         enrollmentService.create({ courseId: 1 }, user),
       ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('enrollmentService.findAll', () => {
+    it('should return ResponseList type Enrollment', async () => {
+      const qb = {
+        leftJoin: jest.fn().mockReturnValue(true),
+        leftJoinAndSelect: jest.fn().mockReturnValue(true),
+        orderBy: jest.fn().mockReturnValue(true),
+        where: jest.fn().mockReturnValue(true),
+        andWhere: jest.fn().mockReturnValue(true),
+        take: jest
+          .fn()
+          .mockReturnValue({ skip: jest.fn().mockReturnValue(true) }),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      };
+      enrollmentRepo.createQueryBuilder.mockReturnValue(qb);
+      const result = await enrollmentService.findAll(new EnrollmentQueryDto());
+      expect(result).toEqual({ data: [], totalCount: 0, page: 1, limit: 25 });
     });
   });
 
