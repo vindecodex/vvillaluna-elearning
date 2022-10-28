@@ -3,11 +3,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { PostgresErrorCode } from '../../shared/enums/error-code/postgres.enum';
 import { User } from '../../user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateContentDto } from '../dto/create-content.dto';
 import { Content } from '../entities/content.entity';
 import { ContentService } from './content.service';
 import { UpdateContentDto } from '../dto/update-content.dto';
+import { ContentQueryDto } from '../dto/content-query.dto';
 
 type MockContentRepo<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const mockContentRepo = (): MockContentRepo => ({
@@ -17,6 +18,7 @@ const mockContentRepo = (): MockContentRepo => ({
   delete: jest.fn(),
   save: jest.fn(),
   preload: jest.fn(),
+  createQueryBuilder: jest.fn(),
 });
 
 describe('ContentService', () => {
@@ -71,6 +73,26 @@ describe('ContentService', () => {
       );
     });
   });
+
+  describe('contentService.findAll', () => {
+    it('should return ResponseList type Content', async () => {
+      const qb = {
+        leftJoin: jest.fn().mockReturnValue(true),
+        leftJoinAndSelect: jest.fn().mockReturnValue(true),
+        orderBy: jest.fn().mockReturnValue(true),
+        where: jest.fn().mockReturnValue(true),
+        andWhere: jest.fn().mockReturnValue(true),
+        take: jest
+          .fn()
+          .mockReturnValue({ skip: jest.fn().mockReturnValue(true) }),
+        getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+      };
+      contentRepo.createQueryBuilder.mockReturnValue(qb);
+      const result = await contentService.findAll(new ContentQueryDto());
+      expect(result).toEqual({ data: [], totalCount: 0, page: 1, limit: 25 });
+    });
+  });
+
   describe('contentService.findOne', () => {
     it('should return content', async () => {
       contentRepo.findOne.mockResolvedValue(content);
@@ -85,6 +107,7 @@ describe('ContentService', () => {
       );
     });
   });
+
   describe('contentService.update', () => {
     it('should return updated content', async () => {
       const dto = new UpdateContentDto();
@@ -102,6 +125,7 @@ describe('ContentService', () => {
         NotFoundException,
       );
     });
+
     it('should throw BadRequestException for duplicate content', async () => {
       const dto = new UpdateContentDto();
       contentRepo.preload.mockResolvedValue(true);
@@ -111,6 +135,7 @@ describe('ContentService', () => {
       );
     });
   });
+
   describe('contentService.delete', () => {
     it('should throw NotFoundException if no content found', async () => {
       contentRepo.delete.mockResolvedValue({ affected: 0 });
