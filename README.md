@@ -8,7 +8,7 @@ After clonning the project
 ##### Step 1
 cd inside root directory of the project and copy `.env.dev.sample` and named it to `.env`
 ```bash
-cp .env.dev.sample .env
+cp .env.sample .env
 ```
 
 for the **smtp** part of the environment variables, this project is using **[sendgrid](https://sendgrid.com/)**.
