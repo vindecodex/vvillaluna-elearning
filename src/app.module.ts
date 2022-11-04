@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -14,12 +14,14 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
 import { ModuleModule } from './module/module.module';
 import { ContentModule } from './content/content.module';
 import { EnrollmentModuleModule } from './enrollment-module/enrollment-module.module';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
-    UserModule,
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: `.env${
+        process.env.NODE_ENV ? '.' + process.env.NODE_ENV : ''
+      }`,
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
@@ -30,8 +32,10 @@ import { EnrollmentModuleModule } from './enrollment-module/enrollment-module.mo
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: !!!process.env.PRODUCTION,
+      synchronize: process.env.NODE_ENV !== 'production',
+      dropSchema: process.env.NODE_ENV === 'e2e',
     }),
+    UserModule,
     AuthModule,
     MailModule,
     RedisModule,
@@ -44,6 +48,16 @@ import { EnrollmentModuleModule } from './enrollment-module/enrollment-module.mo
     EnrollmentModuleModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+      }),
+    },
+  ],
 })
 export class AppModule {}
