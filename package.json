@@ -18,7 +18,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "pretest:e2e": "sh ./test/pretest-e2e",
+    "test:e2e": "NODE_ENV=e2e jest --config ./test/jest-e2e.json",
+    "posttest:e2e": "sh ./test/posttest-e2e"
   },
   "dependencies": {
     "@casl/ability": "^5.1.2",
