@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "pretest:e2e": "sh ./test/pretest-e2e",
-    "test:e2e": "NODE_ENV=e2e jest --config ./test/jest-e2e.json",
+    "test:e2e": "NODE_ENV=e2e jest --config ./test/jest-e2e.json --forceExit --runInBand",
     "posttest:e2e": "sh ./test/posttest-e2e"
   },
   "dependencies": {
