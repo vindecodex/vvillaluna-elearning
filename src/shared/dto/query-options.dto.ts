@@ -30,5 +30,5 @@ export class QueryOptionsDto {
    **/
   @Transform(toBoolean)
   @IsOptional()
-  published: string;
+  published = 'true';
 }
