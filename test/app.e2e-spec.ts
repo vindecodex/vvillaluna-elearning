@@ -11,7 +11,7 @@ import { Reflector } from '@nestjs/core';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -31,7 +31,7 @@ describe('AppController (e2e)', () => {
       .expect('Welcome to E-Learning API');
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close();
   });
 });
