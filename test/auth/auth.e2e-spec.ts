@@ -32,6 +32,7 @@ const newPassword = 'newpass';
 
 describe('Auth Module (e2e)', () => {
   let app: INestApplication;
+  let server: any;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -47,6 +48,7 @@ describe('Auth Module (e2e)', () => {
     );
 
     await app.init();
+    server = app.getHttpServer();
   });
 
   afterAll(async () => {
@@ -54,7 +56,7 @@ describe('Auth Module (e2e)', () => {
   });
 
   it('[POST /signup] - Should create a user', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/signup')
       .send(payload)
       .expect(HttpStatus.CREATED)
@@ -70,33 +72,33 @@ describe('Auth Module (e2e)', () => {
   });
 
   it('[POST /signup] - Should return Bad Request (400) if verifyPassword did not match with password', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/signup')
       .send({ ...payload, verifyPassword: 'wrong' })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('[POST /signup] - Should return Bad Request (400) if duplicate account', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/signup')
       .send(payload) // payload already used above
       .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('[GET /signup/verification?token={token}] - Should verify user', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .get(`/signup/verification?token=${token}`)
       .expect(HttpStatus.OK);
   });
 
   it('[GET /signup/verification?token={token}] - Should return Unauthorized (401) if invalid token', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .get(`/signup/verification?token=${token + 'invalid'}`)
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
   it('[POST /password] - Should reset the password', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ password: newPassword, verifyPassword: newPassword })
@@ -108,7 +110,7 @@ describe('Auth Module (e2e)', () => {
   });
 
   it('[POST /password] - Should return Bad Request(400) if verifyPassword did not match with password', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ password: newPassword, verifyPassword: 'wrong' })
@@ -116,7 +118,7 @@ describe('Auth Module (e2e)', () => {
   });
 
   it('[POST /login] - Should authenticate a user', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/login')
       .send({ email: payload.email, password: newPassword })
       .expect(HttpStatus.OK)
@@ -128,7 +130,7 @@ describe('Auth Module (e2e)', () => {
   });
 
   it('[POST /logout] - Should logout a user', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/logout')
       .set('Authorization', `Bearer ${token}`)
       .expect(HttpStatus.OK)
@@ -139,7 +141,7 @@ describe('Auth Module (e2e)', () => {
   });
 
   it('[POST /logout] - Should return Unauthorized (401) using invalid token', async () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post('/logout')
       .set('Authorization', `Bearer ${token}`)
       .expect(HttpStatus.UNAUTHORIZED);
