@@ -48,7 +48,10 @@ export class InstructorAbility implements RolesAbility {
     can(Action.READ, Module, { 'author.id': id });
     can(Action.DELETE, Module, { 'author.id': id });
     can(Action.UPDATE, Module, { 'author.id': id });
-    can(Action.CREATE, Module, { 'author.role': INSTRUCTOR });
+    can(Action.CREATE, Module, {
+      'author.role': INSTRUCTOR,
+      'course.author.id': id,
+    });
 
     /***************
      *   CONTENT   *
