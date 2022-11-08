@@ -3,10 +3,9 @@
 </div>
 
 ## Setup
-After clonning the project
 
 ##### Step 1
-cd inside root directory of the project and copy `.env.dev.sample` and named it to `.env`
+After clonning the project cd inside root directory of the project and copy `.env.dev.sample` and named it to `.env`
 ```bash
 cp .env.sample .env
 ```
