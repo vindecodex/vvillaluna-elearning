@@ -55,5 +55,7 @@ npm run test:e2e
 npm run test:e2e -- course
 ```
 
+## API Documentation
+
 #### Api Documentation with Swagger
 Working In Progress
