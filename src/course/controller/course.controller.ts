@@ -51,9 +51,9 @@ export class CourseController {
   create(
     @Body() dto: CreateCourseDto,
     @GetUser() user: User,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ): Promise<Course> {
-    dto.icon = file.filename;
+    dto.icon = file?.filename ? file.filename : '';
     return this.courseService.create(dto, user);
   }
 
@@ -64,9 +64,9 @@ export class CourseController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateCourseDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ): Promise<Course> {
-    dto.icon = file.filename;
+    dto.icon = file?.filename ? file.filename : '';
     return this.courseService.update(id, dto);
   }
 

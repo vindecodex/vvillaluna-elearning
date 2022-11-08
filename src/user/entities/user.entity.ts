@@ -15,7 +15,7 @@ import { Module } from '../../module/entities/module.entity';
 import { Content } from '../../content/entities/content.entity';
 import { Enrollment } from '../../enrollment/entities/enrollment.entity';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;

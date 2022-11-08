@@ -7,6 +7,6 @@ export class CreateEnrollmentPolicyHandler implements PolicyHandler {
   constructor(private enrollment: Enrollment) {}
 
   handle(ability: AppAbility) {
-    return ability.can(Action.READ, this.enrollment);
+    return ability.can(Action.CREATE, this.enrollment);
   }
 }

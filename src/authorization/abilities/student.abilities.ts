@@ -52,6 +52,7 @@ export class StudentAbility implements RolesAbility {
       'user.role': Role.STUDENT,
       'user.id': id,
     });
+    can(Action.CREATE, Enrollment, { 'course.isPublished': true });
     can(Action.UPDATE, Enrollment, { 'user.id': id });
     can(Action.DELETE, Enrollment, { 'user.id': id });
 
