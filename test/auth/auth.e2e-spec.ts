@@ -9,13 +9,7 @@ import * as request from 'supertest';
 import { MailService } from '../../src/mail/mail.service';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-
-// Mock Service
-const mailService = {
-  sendVerification: () => true,
-  sendResetPasswordLink: () => true,
-  sendAccountNotFound: () => true,
-};
+import { testHelper } from '../test.helper';
 
 // Auth payload
 const payload = {
@@ -39,7 +33,7 @@ describe('Auth Module (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(MailService)
-      .useValue(mailService)
+      .useValue(testHelper.mocks.mailService)
       .compile();
 
     app = moduleFixture.createNestApplication();

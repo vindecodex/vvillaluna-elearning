@@ -7,41 +7,11 @@ import {
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../../src/authorization/enums/role.enum';
-import { User } from '../../src/user/entities/user.entity';
-import { AuthService } from '../../src/auth/service/auth.service';
-import { UserCredentialsDto } from '../../src/auth/dto/user-credentials.dto';
-import { JwtService } from '@nestjs/jwt';
 import { MailService } from '../../src/mail/mail.service';
-import { async } from 'rxjs';
+import { testHelper } from '../test.helper';
 
 let app: INestApplication;
 let server: any;
-
-const createUser = async (role: Role, email?: string): Promise<User> => {
-  const payload = {
-    email: `${email ? email : role}@mail.com`,
-    password: 'test',
-    verifyPassword: 'test',
-    role: role,
-    firstName: role,
-    lastName: role,
-  };
-  const user = await app
-    .get(AuthService)
-    .createUser(payload as UserCredentialsDto);
-  return user;
-};
-
-const getUserToken = (user: User): string =>
-  app.get(JwtService).sign({ ...user });
-
-// Mock Service
-const mailService = {
-  sendVerification: () => true,
-  sendResetPasswordLink: () => true,
-  sendAccountNotFound: () => true,
-};
 
 describe('Course Module (e2e)', () => {
   let admin: string;
@@ -54,7 +24,7 @@ describe('Course Module (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(MailService)
-      .useValue(mailService)
+      .useValue(testHelper.mocks.mailService)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -65,14 +35,11 @@ describe('Course Module (e2e)', () => {
     await app.init();
     server = app.getHttpServer();
 
-    admin = getUserToken(await createUser(Role.ADMIN));
-    instructorA = getUserToken(
-      await createUser(Role.INSTRUCTOR, 'instructorA'),
-    );
-    instructorB = getUserToken(
-      await createUser(Role.INSTRUCTOR, 'instructorB'),
-    );
-    student = getUserToken(await createUser(Role.STUDENT));
+    const actorsToken = await testHelper.actors(app);
+    admin = actorsToken.admin;
+    instructorA = actorsToken.instructorA;
+    instructorB = actorsToken.instructorB;
+    student = actorsToken.studentA;
   });
 
   afterAll(async () => {
