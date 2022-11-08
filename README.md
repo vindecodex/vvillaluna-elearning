@@ -36,13 +36,24 @@ Running the API server:
 
 ## Testing
 
-##### Unit Testing
-Run unit test: `npm t`
+#### Unit Testing
+Run unit test:
+```bash
+npm t
+```
 
-Run unit test with coverage: `npm run test:cov`
+Run unit test with coverage:
+```bash
+npm run test:cov
+```
 
-##### E2E Testing
-Working In Progress
+#### E2E Testing
+```bash
+npm run test:e2e
 
-##### Api Documentation with Swagger
+# By Module (subject | course | module | content | enrollment | user)
+npm run test:e2e -- course
+```
+
+#### Api Documentation with Swagger
 Working In Progress
