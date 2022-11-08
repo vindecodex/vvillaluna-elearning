@@ -2,7 +2,7 @@ import { Enrollment } from '../../enrollment/entities/enrollment.entity';
 import { Module } from '../../module/entities/module.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('enrollment_modules')
 export class EnrollmentModule {
   @PrimaryGeneratedColumn()
   id: number;

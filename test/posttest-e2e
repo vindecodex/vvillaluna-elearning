@@ -1,0 +1,12 @@
+#!/bin/bash
+
+CONFIG=docker-compose.e2e.yml
+
+
+docker container stop elearning_test-test-db-1 elearning_test-test-redis-1
+
+if which docker-compose >/dev/null; then
+				docker-compose -f $CONFIG rm -f test-db test-redis
+else
+				docker compose -f $CONFIG rm -f test-db test-redis
+fi

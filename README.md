@@ -3,12 +3,11 @@
 </div>
 
 ## Setup
-After clonning the project
 
 ##### Step 1
-cd inside root directory of the project and copy `.env.dev.sample` and named it to `.env`
+After clonning the project cd inside root directory of the project and copy `.env.dev.sample` and named it to `.env`
 ```bash
-cp .env.dev.sample .env
+cp .env.sample .env
 ```
 
 for the **smtp** part of the environment variables, this project is using **[sendgrid](https://sendgrid.com/)**.
@@ -36,13 +35,26 @@ Running the API server:
 
 ## Testing
 
-##### Unit Testing
-Run unit test: `npm t`
+#### Unit Testing
+Run unit test:
+```bash
+npm t
+```
 
-Run unit test with coverage: `npm run test:cov`
+Run unit test with coverage:
+```bash
+npm run test:cov
+```
 
-##### E2E Testing
-Working In Progress
+#### E2E Testing
+```bash
+npm run test:e2e
 
-##### Api Documentation with Swagger
+# By Module (subject | course | module | content | enrollment | user)
+npm run test:e2e -- course
+```
+
+## API Documentation
+
+#### Api Documentation with Swagger
 Working In Progress

@@ -69,7 +69,7 @@ export class CourseService {
         description,
         subject: { id: subjectId },
         author: { id: user.id },
-        icon: `${Uploads.DESTINATION}/${icon}`,
+        icon: icon ? `${Uploads.DESTINATION}/${icon}` : icon,
       });
       await this.courseRepo.save(course);
       return course;
@@ -88,7 +88,7 @@ export class CourseService {
       const course = await this.courseRepo.preload({
         id,
         ...dto,
-        icon: `${Uploads.DESTINATION}/${icon}`,
+        icon: icon ? `${Uploads.DESTINATION}/${icon}` : icon,
       });
       if (!course) throw new NotFoundException(notFound('Course'));
 
