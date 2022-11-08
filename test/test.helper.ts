@@ -7,7 +7,7 @@ import { User } from '../src/user/entities/user.entity';
 
 export const testHelper = {
   actors: async (app: INestApplication) => {
-    const { createUser, getUserToken } = helpers(app);
+    const { createUser, getUserToken } = testServiceTool(app);
     const { ADMIN, INSTRUCTOR, STUDENT } = Role;
 
     const admin = await createUser(ADMIN);
@@ -34,7 +34,7 @@ export const testHelper = {
   },
 };
 
-const helpers = (app: INestApplication) => ({
+export const testServiceTool = (app: INestApplication) => ({
   createUser: async (role: Role, email?: string): Promise<User> => {
     const payload = {
       email: `${email ? email : role}@mail.com`,
@@ -50,4 +50,5 @@ const helpers = (app: INestApplication) => ({
     return user;
   },
   getUserToken: (user: User): string => app.get(JwtService).sign({ ...user }),
+  getUserByToken: (token: string) => app.get(JwtService).decode(token),
 });
