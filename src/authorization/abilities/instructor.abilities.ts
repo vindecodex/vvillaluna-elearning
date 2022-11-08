@@ -48,7 +48,10 @@ export class InstructorAbility implements RolesAbility {
     can(Action.READ, Module, { 'author.id': id });
     can(Action.DELETE, Module, { 'author.id': id });
     can(Action.UPDATE, Module, { 'author.id': id });
-    can(Action.CREATE, Module, { 'author.role': INSTRUCTOR });
+    can(Action.CREATE, Module, {
+      'author.role': INSTRUCTOR,
+      'course.author.id': id,
+    });
 
     /***************
      *   CONTENT   *
@@ -56,7 +59,10 @@ export class InstructorAbility implements RolesAbility {
     can(Action.READ, Content, { 'author.id': id });
     can(Action.DELETE, Content, { 'author.id': id });
     can(Action.UPDATE, Content, { 'author.id': id });
-    can(Action.CREATE, Content, { 'author.role': INSTRUCTOR });
+    can(Action.CREATE, Content, {
+      'author.role': INSTRUCTOR,
+      'module.author.id': id,
+    });
 
     /***************
      * ENROLLMENT  *

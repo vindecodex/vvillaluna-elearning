@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CONFIG=docker-compose.e2e.yml
+ENV=.env.e2e
+
+if which docker-compose >/dev/null; then
+				docker-compose --env-file $ENV -f $CONFIG up -d
+else
+				docker compose --env-file $ENV -f $CONFIG up -d
+fi

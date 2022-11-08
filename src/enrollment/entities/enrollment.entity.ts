@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('enrollments')
 @Unique(['user', 'course'])
 export class Enrollment {
   @PrimaryGeneratedColumn()
