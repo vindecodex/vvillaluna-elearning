@@ -5,7 +5,7 @@
 ## Setup
 
 ##### Step 1
-After clonning the project cd inside root directory of the project and copy `.env.dev.sample` and named it to `.env`
+After clonning the project cd inside root directory of the project and copy `.env.sample` and named it to `.env`
 ```bash
 cp .env.sample .env
 ```
@@ -55,6 +55,4 @@ npm run test:e2e -- course
 ```
 
 ## API Documentation
-
-#### Api Documentation with Swagger
 While running the API, navigate to http://localhost:3000/docs
