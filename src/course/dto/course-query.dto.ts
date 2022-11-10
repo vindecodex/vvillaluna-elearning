@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive } from 'class-validator';
 import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
@@ -11,21 +12,22 @@ type TableRelations =
   | CourseRelations.ENROLLMENT
   | CourseRelations.MODULE
   | CourseRelations.SUBJECT;
-export class CourseQueryDto extends QueryOptionsDto {
+export class CourseQueryDto extends PartialType(QueryOptionsDto) {
   @IsOptional()
   @IsIn(Object.values(CourseFields))
-  sort: string;
+  sort?: string;
 
   @IsOptional()
   @IsIn(Object.values(CourseRelations), { each: true })
   @Transform(toArray)
-  join: TableRelations[];
+  join?: TableRelations[];
 
   @IsOptional()
   @IsPositive()
-  subjectId: number;
+  subjectId?: number;
 
   @IsOptional()
   @Transform(toBoolean)
-  sections: string;
+  @IsIn([true, false])
+  sections?: string;
 }

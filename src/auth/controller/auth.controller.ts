@@ -20,7 +20,10 @@ import { ResponseObject } from '../../shared/interfaces/response-object.interfac
 import { LocalAuthGuard } from '../../shared/guards/local-auth.guard';
 import { RequestResetPasswordDto } from '../dto/request-reset-password.dto';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('User Auth and Verification')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}

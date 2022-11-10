@@ -57,4 +57,4 @@ npm run test:e2e -- course
 ## API Documentation
 
 #### Api Documentation with Swagger
-Working In Progress
+While running the API, navigate to http://localhost:3000/docs

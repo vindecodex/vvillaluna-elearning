@@ -13,6 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateCoursePolicyHandler } from '../../authorization/policy-handler/course/create-course-policy.handler';
 import { DeleteCoursePolicyHandler } from '../../authorization/policy-handler/course/delete-course-policy.handler';
 import { ReadCoursePolicyHandler } from '../../authorization/policy-handler/course/read-course-policy.handler';
@@ -29,6 +30,8 @@ import { UpdateCourseDto } from '../dto/update-course.dto';
 import { Course } from '../entities/course.entity';
 import { CourseService } from '../service/course.service';
 
+@ApiBearerAuth()
+@ApiTags('Course')
 @Controller('courses')
 export class CourseController {
   constructor(private courseService: CourseService) {}

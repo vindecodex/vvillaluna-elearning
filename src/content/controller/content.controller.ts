@@ -9,6 +9,7 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateContentPolicyHandler } from '../../authorization/policy-handler/content/create-content-policy.handler';
 import { DeleteContentPolicyHandler } from '../../authorization/policy-handler/content/delete-content-policy.handler';
 import { ReadContentPolicyHandler } from '../../authorization/policy-handler/content/read-content-policy.handler';
@@ -25,6 +26,8 @@ import { UpdateContentDto } from '../dto/update-content.dto';
 import { Content } from '../entities/content.entity';
 import { ContentService } from '../service/content.service';
 
+@ApiBearerAuth()
+@ApiTags('Content')
 @Controller('contents')
 export class ContentController {
   constructor(private readonly contentService: ContentService) {}
