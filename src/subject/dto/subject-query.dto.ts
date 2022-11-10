@@ -1,5 +1,7 @@
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional } from 'class-validator';
+import { SwaggerDescription } from '../../shared/enums/swagger-description.enum';
 import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
 import { toArray } from '../../shared/helpers/to-array.helper';
 import { toBoolean } from '../../shared/helpers/to-boolean.helper';
@@ -7,15 +9,21 @@ import { SubjectFields } from '../enum/subject-fields.enum';
 import { SubjectRelations } from '../enum/subject-relations.enum';
 
 type TableRelations = SubjectRelations.COURSE | SubjectRelations.OWNER;
-export class SubjectQueryDto extends QueryOptionsDto {
+export class SubjectQueryDto extends PartialType(QueryOptionsDto) {
   @IsOptional()
   @IsIn(Object.values(SubjectFields))
-  sort: string;
+  @ApiProperty({
+    description: SwaggerDescription.SORT,
+  })
+  sort?: string;
 
   @IsOptional()
   @IsIn(Object.values(SubjectRelations), { each: true })
   @Transform(toArray)
-  join: TableRelations[];
+  @ApiProperty({
+    description: SwaggerDescription.JOIN,
+  })
+  join?: TableRelations[];
 
   /**
    * If type is set to boolean it will convert the value to always true
@@ -27,5 +35,9 @@ export class SubjectQueryDto extends QueryOptionsDto {
    **/
   @IsOptional()
   @Transform(toBoolean)
-  courses: string;
+  @IsIn([true, false])
+  @ApiProperty({
+    description: 'To filter subjects that have courses.',
+  })
+  courses?: string;
 }

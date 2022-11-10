@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateSubjectPolicyHandler } from '../../authorization/policy-handler/subject/create-subject-policy.handler';
 import { DeleteSubjectPolicyHandler } from '../../authorization/policy-handler/subject/delete-subject-policy.handler';
 import { ReadSubjectPolicyHandler } from '../../authorization/policy-handler/subject/read-subject-policy.handler';
@@ -26,6 +27,8 @@ import { UpdateSubjectDto } from '../dto/update-subject.dto';
 import { Subject } from '../entities/subject.entity';
 import { SubjectService } from '../service/subject.service';
 
+@ApiBearerAuth()
+@ApiTags('Subject')
 @Controller('subjects')
 export class SubjectController {
   constructor(private subjectService: SubjectService) {}

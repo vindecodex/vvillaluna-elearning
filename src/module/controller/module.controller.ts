@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateModulePolicyHandler } from '../../authorization/policy-handler/module/create-module-policy.handler';
 import { DeleteModulePolicyHandler } from '../../authorization/policy-handler/module/delete-module-policy.handler';
 import { ReadModulePolicyHandler } from '../../authorization/policy-handler/module/read-module-policy.handler';
@@ -25,6 +26,8 @@ import { UpdateModuleDto } from '../dto/update-module.dto';
 import { Module } from '../entities/module.entity';
 import { ModuleService } from '../service/module.service';
 
+@ApiBearerAuth()
+@ApiTags('Module')
 @Controller('modules')
 export class ModuleController {
   constructor(private readonly moduleService: ModuleService) {}

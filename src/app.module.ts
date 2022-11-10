@@ -19,9 +19,7 @@ import { APP_PIPE } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env${
-        process.env.NODE_ENV ? '.' + process.env.NODE_ENV : ''
-      }`,
+      envFilePath: process.env.NODE_ENV !== 'e2e' ? '.env' : '.env.e2e',
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
