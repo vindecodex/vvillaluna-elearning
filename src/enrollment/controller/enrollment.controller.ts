@@ -9,6 +9,7 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/create-enrollment-policy.handler';
 import { DeleteEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/delete-enrollment-policy.handler';
 import { ReadEnrollmentPolicyHandler } from '../../authorization/policy-handler/enrollment/read-enrollment-policy.handler';
@@ -26,6 +27,8 @@ import { UpdateEnrollmentDto } from '../dto/update-enrollment.dto';
 import { Enrollment } from '../entities/enrollment.entity';
 import { EnrollmentService } from '../service/enrollment.service';
 
+@ApiBearerAuth()
+@ApiTags('Enrollment')
 @Controller('enrollments')
 export class EnrollmentController {
   constructor(private readonly enrollmentService: EnrollmentService) {}

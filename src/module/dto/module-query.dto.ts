@@ -1,5 +1,7 @@
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsIn, IsOptional, IsPositive } from 'class-validator';
+import { SwaggerDescription } from '../../shared/enums/swagger-description.enum';
 import { QueryOptionsDto } from '../../shared/dto/query-options.dto';
 import { toArray } from '../../shared/helpers/to-array.helper';
 import { toBoolean } from '../../shared/helpers/to-boolean.helper';
@@ -10,25 +12,31 @@ type TableRelations =
   | ModuleRelations.AUTHOR
   | ModuleRelations.CONTENT
   | ModuleRelations.COURSE;
-export class ModuleQueryDto extends QueryOptionsDto {
+export class ModuleQueryDto extends PartialType(QueryOptionsDto) {
   @IsOptional()
   @IsIn(Object.values(ModuleFields))
-  sort: string;
+  @ApiProperty({ description: SwaggerDescription.SORT })
+  sort?: string;
 
   @IsOptional()
   @IsIn(Object.values(ModuleRelations), { each: true })
   @Transform(toArray)
-  join: TableRelations[];
+  @ApiProperty({ description: SwaggerDescription.JOIN })
+  join?: TableRelations[];
 
   @IsOptional()
   @IsPositive()
-  course: number;
+  @ApiProperty({ description: 'ID of the parent course' })
+  course?: number;
 
   @IsOptional()
   @IsPositive()
-  duration: number;
+  @ApiProperty({ description: 'To filter modules based on their duration.' })
+  duration?: number;
 
   @IsOptional()
   @Transform(toBoolean)
-  hasContents: string;
+  @IsIn([true, false])
+  @ApiProperty({ description: 'To filter modules who has contents' })
+  hasContents?: string;
 }
